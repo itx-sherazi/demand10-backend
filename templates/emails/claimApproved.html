@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Your Company Claim Request has been Approved!</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+    <h1 style="color: white; margin: 0;">🎉 Claim Approved!</h1>
+  </div>
+  
+  <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
+    <h2 style="color: #139692;">Congratulations {{userName}}!</h2>
+    
+    <p>Great news! Your claim request for <strong>"{{companyName}}"</strong> has been approved by our admin team.</p>
+    
+    <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
+      <h3 style="color: #139692; margin-top: 0;">Next Steps</h3>
+      <ol>
+        <li>Visit your dashboard </li>
+        <li>Navigate to "Edit Companies" section</li>
+        <li>Find your company "{{companyName}}" and click "Edit"</li>
+        <li>Update your company details, add images, and enhance your listing</li>
+      </ol>
+    </div>
+    
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="https://intentwire.com/user-dashboard" 
+         style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+        Go to Your Dashboard
+      </a>
+    </div>
+    
+    <p style="background-color: #fffbe6; padding: 15px; border-radius: 5px; border-left: 3px solid #ffd700;">
+      <strong>💡 Pro Tip:</strong> Make sure to complete your company profile with detailed information, high-quality images, and customer reviews to maximize visibility on IntentWire!
+    </p>
+    
+    <p>Need help? Contact our support team at <a href="mailto:info@intentwire.com" style="color: #139692;">info@intentwire.com</a></p>
+  </div>
+  
+  <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
+    <p>Thank you for choosing IntentWire!</p>
+    <p>© {{currentYear}} IntentWire. All rights reserved.</p>
+  </div>
+</body>
+</html>
