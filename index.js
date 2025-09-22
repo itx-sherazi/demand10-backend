@@ -54,7 +54,10 @@ app.use('/sponsor-badges', express.static(path.join(process.cwd(), 'public', 'sp
 
 // Connect MongoDB
 connectDB();
-
+// Health check route
+    app.get("/", (req, res) => {
+      res.status(200).json({ message: "Server is running" });
+    });
 // Redis-connected routes setup inside the connectRedis flow
 connectRedis()
   .then(() => {
@@ -76,10 +79,7 @@ connectRedis()
     app.use("/api/v1", CompanyTeamUpload);
     app.use('/api/v1', cacheRoutes);
 
-    // Health check route
-    app.get("/", (req, res) => {
-      res.status(200).json({ message: "Server is running" });
-    });
+    
 
     // Start server
     const PORT = process.env.PORT || 4000;
