@@ -28,11 +28,11 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  "https://dashboard.intentwire.com",
+  "https://dashboard.demand10.com",
   'http://145.79.6.178:3000',
-  'https://intentwire.com',
-  'https://www.intentwire.com',
-  'https://api.intentwire.com',
+  'https://demand10.com',
+  'https://www.demand10.com',
+  'https://api.demand10.com',
   "http://localhost:5173"
 ];
 

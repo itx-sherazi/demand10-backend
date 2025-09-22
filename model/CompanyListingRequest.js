@@ -60,6 +60,41 @@ const companyListingRequestSchema = new mongoose.Schema({
     linkedinUrl: { type: String },
     twitterUrl: { type: String }
   }],
+  // Added new fields
+  minimumProjectSize: {
+    type: Number
+  },
+  hourlyRate: {
+    type: Number
+  },
+  // Service lines field
+  services: [{
+    serviceName: { type: String, required: true },
+    category: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+  // Focus areas field
+  focus: [{
+    focusName: { type: String, required: true },
+    category: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+  
+  // Industries field (for graph data)
+  industries: [{
+    industryName: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+  
+  // Industry tags field (simple string array)
+  industryTags: [String],
+  
+  // Clients field
+  clients: [{
+    clientSegment: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+  
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],

@@ -6,8 +6,12 @@ import {
   getUserListingRequests,
   approveListingRequest,
   rejectListingRequest,
-  deleteListingRequest, // Add this import
-  getCategoriesWithSubcategories
+  deleteListingRequest,
+  getCategoriesWithSubcategories,
+  getCompanyServices,
+  getCompanyFocus,
+  getCompanyIndustries,
+  getCompanyClients // Add this import
 } from '../controller/CompanyListingController.js';
 
 // Import auth middleware
@@ -34,6 +38,18 @@ router.put('/listing/approve/:requestId', adminAuthMiddleware, approveListingReq
 router.put('/listing/reject/:requestId', adminAuthMiddleware, rejectListingRequest);
 
 // Delete a listing request (admin only)
-router.delete('/listing/:requestId', adminAuthMiddleware, deleteListingRequest); // Add this route
+router.delete('/listing/:requestId', adminAuthMiddleware, deleteListingRequest);
+
+// Get company services by company ID
+router.get('/company/:companyId/services', getCompanyServices);
+
+// Get company focus by company ID
+router.get('/company/:companyId/focus', getCompanyFocus);
+
+// Get company industries by company ID
+router.get('/company/:companyId/industries', getCompanyIndustries);
+
+// Get company clients by company ID
+router.get('/company/:companyId/clients', getCompanyClients); // Add this route
 
 export default router;

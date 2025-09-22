@@ -35,7 +35,7 @@ Please review the review in the admin dashboard.`;
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://dashboard.intentwire.com/" 
+            <a href="https://dashboard.demand10.com/" 
                style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
               Review in Dashboard
             </a>
@@ -45,7 +45,7 @@ Please review the review in the admin dashboard.`;
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -77,10 +77,10 @@ Thank you for submitting your review for ${companyName}. Our admin team will rev
 
 You will receive another email once your review has been approved or rejected.
 
-Thank you for choosing IntentWire.
+Thank you for choosing Demand10.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const userEmailHtml = `
       <!DOCTYPE html>
@@ -110,11 +110,11 @@ IntentWire Team`;
             </ul>
           </div>
           
-          <p>Thank you for choosing IntentWire and helping our community make informed decisions!</p>
+          <p>Thank you for choosing Demand10 and helping our community make informed decisions!</p>
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -146,10 +146,10 @@ The status of your review for ${companyName} has been updated to approved by our
 
 Your review is now visible on the company's profile page.
 
-Thank you for choosing IntentWire.
+Thank you for choosing Demand10.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -182,7 +182,7 @@ IntentWire Team`;
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>\r
         </div>
       </body>
       </html>
@@ -213,12 +213,12 @@ export const sendReviewRejectedNotificationToUser = async (userEmail, companyNam
       
 The status of your review for ${companyName} has been updated to rejected by our admin team.
 
-If you believe this was an error, please contact our support team at info@intentwire.com.
+If you believe this was an error, please contact our support team at info@demand10.com.
 
-Thank you for your interest in IntentWire.
+Thank you for your interest in Demand10.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -251,14 +251,14 @@ IntentWire Team`;
           
           <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
             <h3 style="color: #139692; margin-top: 0;">What you can do:</h3>
-            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@intentwire.com" style="color: #139692;">info@intentwire.com</a> with details about your submission.</p>
+            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@demand10.com" style="color: #139692;">info@demand10.com</a> with details about your submission.</p>
           </div>
           
-          <p>Thank you for your interest in IntentWire.</p>
+          <p>Thank you for your interest in Demand10.</p>
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -314,7 +314,7 @@ Please review the request in the admin dashboard.`;
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://dashboard.intentwire.com/" 
+            <a href="https://dashboard.Demand10.com/" 
                style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
               Review in Dashboard
             </a>
@@ -324,7 +324,7 @@ Please review the request in the admin dashboard.`;
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -356,10 +356,10 @@ Thank you for submitting your company listing request for ${companyName}. Our ad
 
 You will receive another email once your request has been approved or rejected.
 
-Thank you for choosing IntentWire.
+Thank you for choosing Demand10.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -389,11 +389,11 @@ IntentWire Team`;
             </ul>
           </div>
           
-          <p>Thank you for choosing IntentWire to showcase your business!</p>
+          <p>Thank you for choosing Demand10 to showcase your business!</p>
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -425,10 +425,10 @@ The status of your company listing request for ${companyName} has been updated t
 
 Your company is now visible in the ${subcategoryName} subcategory.
 
-Thank you for choosing IntentWire.
+Thank you for choosing Demand10.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -454,18 +454,18 @@ IntentWire Team`;
             <p>Your company is now visible in the <strong>${subcategoryName}</strong> subcategory and will help potential customers find your business.</p>
             
             <div style="text-align: center; margin: 20px 0;">
-              <a href="https://intentwire.com/${subcategoryName.toLowerCase().replace(/\s+/g, '-')}/${companyName.toLowerCase().replace(/\s+/g, '-')}" 
+              <a href="https://Demand10.com/${subcategoryName.toLowerCase().replace(/\s+/g, '-')}/${companyName.toLowerCase().replace(/\s+/g, '-')}" 
                  style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
                 View Your Listing
               </a>
             </div>
           </div>
           
-          <p>Thank you for choosing IntentWire to showcase your business!</p>
+          <p>Thank you for choosing Demand10 to showcase your business!</p>
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -495,12 +495,12 @@ export const sendCompanyListingRejectedNotificationToUser = async (userEmail, co
       
 The status of your company listing request for ${companyName} has been updated to rejected by our admin team.
 
-If you believe this was an error, please contact our support team at info@intentwire.com.
+If you believe this was an error, please contact our support team at info@Demand10.com.
 
-Thank you for your interest in IntentWire.
+Thank you for your interest in Demand10.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -533,14 +533,14 @@ IntentWire Team`;
           
           <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
             <h3 style="color: #139692; margin-top: 0;">What you can do:</h3>
-            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@intentwire.com" style="color: #139692;">info@intentwire.com</a> with details about your submission.</p>
+            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #139692;">info@Demand10.com</a> with details about your submission.</p>
           </div>
           
-          <p>Thank you for your interest in IntentWire.</p>
+          <p>Thank you for your interest in Demand10.</p>
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -574,7 +574,7 @@ Review ID: ${reviewId}
 Review Status: ${reviewStatus}
 
 Best regards,
-IntentWire System`;
+Demand10 System`;
 
     const adminEmailHtml = `
       <!DOCTYPE html>
@@ -606,7 +606,7 @@ IntentWire System`;
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>
@@ -636,12 +636,12 @@ export const sendReviewDeletedNotificationToUser = async (userEmail, companyName
       
 We're writing to inform you that your review for ${companyName} has been removed from our system.
 
-If you have any questions about this removal, please contact our support team at info@intentwire.com.
+If you have any questions about this removal, please contact our support team at info@Demand10.com.
 
 Thank you for your understanding.
 
 Best regards,
-IntentWire Team`;
+Demand10 Team`;
 
     const userEmailHtml = `
       <!DOCTYPE html>
@@ -669,14 +669,14 @@ IntentWire Team`;
           
           <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
             <h3 style="color: #139692; margin-top: 0;">Have questions?</h3>
-            <p>If you have any questions about this removal, please contact our support team at <a href="mailto:info@intentwire.com" style="color: #139692;">info@intentwire.com</a>.</p>
+            <p>If you have any questions about this removal, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #139692;">info@Demand10.com</a>.</p>
           </div>
           
           <p>Thank you for your understanding.</p>
         </div>
         
         <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666;">
-          <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
       </body>
       </html>

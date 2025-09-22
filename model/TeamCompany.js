@@ -20,7 +20,6 @@ const companyTeamSchema = new mongoose.Schema({
   categoryName: { type: String },
   description:{type:String},
   employees: { type: mongoose.Schema.Types.Mixed },
-  industries: [String],
   website: { type: String },
   slug: {
     type: String,
@@ -45,6 +44,42 @@ const companyTeamSchema = new mongoose.Schema({
     default: false
   },
   teamLeads: [teamLeadSchema],
+  // Added new fields
+  minimumProjectSize: {
+    type: Number
+  },
+  hourlyRate: {
+    type: Number
+  },
+  // Service lines field
+  services: [{
+    serviceName: { type: String, required: true },
+    category: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+  
+  // Focus areas field
+  focus: [{
+    focusName: { type: String, required: true },
+    category: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+
+  // Industries field (for graph data)
+  industries: [{
+    industryName: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+
+  // Industry tags field (simple string array)
+  industryTags: [String],
+
+  // Clients field
+  clients: [{
+    clientSegment: { type: String, required: true },
+    percentage: { type: Number, required: true, min: 10, max: 100 }
+  }],
+
 });
 
 const CompanyTeamData = mongoose.model("companyTeam", companyTeamSchema);

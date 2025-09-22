@@ -121,7 +121,7 @@ export const generateBadgeEmbed = async (req, res) => {
             VERIFIED
           </text>
           <text x="${validatedWidth/2}" y="${2*validatedHeight/3 + 5}" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle">
-            by IntentWire
+            by demand10
           </text>
         </svg>
       `;
@@ -164,7 +164,7 @@ export const generateBadgeEmbed = async (req, res) => {
           ${selectedBadge.name || 'VERIFIED'}
         </text>
         <text x="${validatedWidth/2}" y="${2*validatedHeight/3 + 5}" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle">
-          IntentWire Badge
+          demand10 Badge
         </text>
       </svg>
     `;
@@ -184,7 +184,7 @@ export const generateBadgeEmbed = async (req, res) => {
       <svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">
         <rect width="200" height="60" fill="#cccccc" rx="8" />
         <text x="100" y="35" font-family="Arial, sans-serif" font-size="14" fill="#666666" text-anchor="middle">
-          IntentWire Badge
+          demand10 Badge
         </text>
       </svg>
     `;
@@ -261,7 +261,7 @@ export const getBadgeEmbedInfo = async (req, res) => {
     .sort({ assignedAt: -1 });
     
     // Generate company profile URL with UTM parameters for tracking
-    const baseUrl = `https://intentwire.com/${company.subcategory?.slug || 'company'}/${company.slug}`;
+    const baseUrl = `https://demand10.com/${company.subcategory?.slug || 'company'}/${company.slug}`;
     const utmParams = ref ? `?utm_source=${ref}&utm_medium=badge&utm_campaign=badge-referral` : '';
     const companyUrl = baseUrl + utmParams;
     

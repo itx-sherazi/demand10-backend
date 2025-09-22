@@ -224,7 +224,8 @@ export const uploadCompaniesToSubcategory = async (req, res) => {
             employees: isNaN(parseInt(employees))
               ? employees
               : parseInt(employees),
-            industries: Industry?.split(",").map((i) => i.trim()) || [],
+            // Changed from industries to industryTags since this is just a comma-separated list
+            industryTags: Industry?.split(",").map((i) => i.trim()) || [],
             website: website?.trim() || null,
             description: description?.trim() || null,
             linkedinUrl: linkedinUrl?.trim() || null,
@@ -379,7 +380,7 @@ export const uploadCompaniesToSubcategory = async (req, res) => {
     ).populate({
       path: "companies",
       select:
-        "companyName slug industries website employees foundedYear image teamLeads description",
+        "companyName slug industryTags website employees foundedYear image teamLeads description",
     });
 
     const endTime = Date.now();
@@ -622,11 +623,12 @@ export const getAllCompaniesCategory = async (req, res) => {
 export const updateCompanyTeam = async (req, res) => {
   try {
     const { id } = req.params;
-    const { teamLeads, industries, ...companyData } = req.body;
+    const { teamLeads, industries, industryTags, ...companyData } = req.body;
 
     // Parse JSON strings if they exist
     let parsedTeamLeads = [];
     let parsedIndustries = [];
+    let parsedIndustryTags = [];
 
     if (teamLeads) {
       try {
@@ -644,11 +646,20 @@ export const updateCompanyTeam = async (req, res) => {
       }
     }
 
+    if (industryTags) {
+      try {
+        parsedIndustryTags = typeof industryTags === 'string' ? JSON.parse(industryTags) : industryTags;
+      } catch (error) {
+        parsedIndustryTags = typeof industryTags === 'string' ? industryTags.split(',').map(i => i.trim()) : industryTags;
+      }
+    }
+
     // Build update object
     const updateData = {
       ...companyData,
       teamLeads: parsedTeamLeads,
-      industries: parsedIndustries
+      industries: parsedIndustries,
+      industryTags: parsedIndustryTags
     };
 
     // Handle image upload if present
@@ -708,11 +719,12 @@ export const updateCompanyTeam = async (req, res) => {
 export const updateCompanyTeamBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    const { teamLeads, industries, ...companyData } = req.body;
+    const { teamLeads, industries, industryTags, ...companyData } = req.body;
 
     // Parse JSON strings if they exist
     let parsedTeamLeads = [];
     let parsedIndustries = [];
+    let parsedIndustryTags = [];
 
     if (teamLeads) {
       try {
@@ -730,11 +742,20 @@ export const updateCompanyTeamBySlug = async (req, res) => {
       }
     }
 
+    if (industryTags) {
+      try {
+        parsedIndustryTags = typeof industryTags === 'string' ? JSON.parse(industryTags) : industryTags;
+      } catch (error) {
+        parsedIndustryTags = typeof industryTags === 'string' ? industryTags.split(',').map(i => i.trim()) : industryTags;
+      }
+    }
+
     // Build update object
     const updateData = {
       ...companyData,
       teamLeads: parsedTeamLeads,
-      industries: parsedIndustries
+      industries: parsedIndustries,
+      industryTags: parsedIndustryTags
     };
 
     // Handle image upload if present

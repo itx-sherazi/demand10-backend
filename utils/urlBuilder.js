@@ -2,7 +2,7 @@
 import CompanyTeamData from "../model/TeamCompany.js";
 import Subcategory from "../model/Subcategory.js";
 
-const BASE_URL = process.env.FRONTEND_URL || 'https://intentwire.com';
+const BASE_URL = process.env.FRONTEND_URL || 'https://demand10.com';
 
 /**
  * Build SEO-friendly URL for a company

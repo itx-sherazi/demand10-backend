@@ -9,7 +9,7 @@ export const generateBusinessEmailVerificationTemplate = (verificationCode, user
   return {
     text: `Hello ${userName},
 
-You have requested to claim the company "${companyName}" on IntentWire.
+You have requested to claim the company "${companyName}" on Demand10.
 
 To verify your business email address, please use the following verification code:
 
@@ -20,7 +20,7 @@ This code will expire in 5 minutes.
 If you did not request this, please ignore this email.
 
 Best regards,
-IntentWire Team`,
+Demand10 Team`,
 
     html: `<!DOCTYPE html>
 <html>
@@ -41,7 +41,7 @@ IntentWire Team`,
         <h2 style="color: #333333; font-size: 24px; margin-top: 0;">Hello ${userName},</h2>
         
         <p style="color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;">
-          You have requested to claim the company <strong>"${companyName}"</strong> on IntentWire.
+          You have requested to claim the company <strong>"${companyName}"</strong> on Demand10.
         </p>
         
         <p style="color: #666666; font-size: 16px; line-height: 1.5; margin: 20px 0;">
@@ -66,10 +66,10 @@ IntentWire Team`,
     <tr>
       <td style="padding: 20px 30px; background-color: #f8f8f8; text-align: center;">
         <p style="color: #999999; font-size: 12px; margin: 0;">
-          &copy; ${new Date().getFullYear()} IntentWire. All rights reserved.
+          &copy; ${new Date().getFullYear()} Demand10. All rights reserved.
         </p>
         <p style="color: #999999; font-size: 12px; margin: 5px 0 0 0;">
-          <a href="https://intentwire.com" style="color: #139692; text-decoration: none;">https://intentwire.com</a>
+          <a href="https://demand10.com" style="color: #139692; text-decoration: none;">https://demand10.com</a>
         </p>
       </td>
     </tr>

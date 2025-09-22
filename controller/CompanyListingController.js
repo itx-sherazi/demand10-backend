@@ -2,8 +2,7 @@ import CompanyListingRequest from "../model/CompanyListingRequest.js";
 import Category from "../model/Category.js";
 import Subcategory from "../model/Subcategory.js";
 import CompanyTeamData from "../model/TeamCompany.js";
-import User from "../model/User.js";
-import AdminUser from "../model/AdminUser.js";
+
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
 import { Readable } from "stream";
@@ -84,7 +83,14 @@ export const submitCompanyListing = async (req, res) => {
       twitterUrl,
       categoryId,
       subcategoryId,
-      teamLeads
+      teamLeads,
+      minimumProjectSize,
+      hourlyRate,
+      services,
+      focus,
+      industries,
+      industryTags,
+      clients // Add clients data
     } = req.body;
 
     // Validate required fields
@@ -144,6 +150,125 @@ export const submitCompanyListing = async (req, res) => {
       }
     }
 
+    // Parse services if provided
+    let parsedServices = [];
+    if (services) {
+      try {
+        parsedServices = JSON.parse(services);
+        // Validate services: each service must be ≥10% and total cannot exceed 100%
+        let totalPercentage = 0;
+        for (const service of parsedServices) {
+          if (service.percentage < 10) {
+            return res.status(400).json({
+              ok: false,
+              message: "Each service must be at least 10%"
+            });
+          }
+          totalPercentage += service.percentage;
+        }
+        if (totalPercentage > 100) {
+          return res.status(400).json({
+            ok: false,
+            message: "Total percentage cannot exceed 100%"
+          });
+        }
+      } catch (parseError) {
+        console.error("Services parse error:", parseError);
+      }
+    }
+
+    // Parse focus if provided
+    let parsedFocus = [];
+    if (focus) {
+      try {
+        parsedFocus = JSON.parse(focus);
+        // Validate focus: each focus must be ≥10% and total cannot exceed 100%
+        let totalPercentage = 0;
+        for (const focusItem of parsedFocus) {
+          if (focusItem.percentage < 10) {
+            return res.status(400).json({
+              ok: false,
+              message: "Each focus area must be at least 10%"
+            });
+          }
+          totalPercentage += focusItem.percentage;
+        }
+        if (totalPercentage > 100) {
+          return res.status(400).json({
+            ok: false,
+            message: "Total focus percentage cannot exceed 100%"
+          });
+        }
+      } catch (parseError) {
+        console.error("Focus parse error:", parseError);
+      }
+    }
+
+    // Parse industries for chart data if provided
+    let parsedIndustries = [];
+    if (industries) {
+      try {
+        parsedIndustries = JSON.parse(industries);
+        // Validate industries: each industry must be ≥10% and total cannot exceed 100%
+        let totalPercentage = 0;
+        for (const industry of parsedIndustries) {
+          if (industry.percentage < 10) {
+            return res.status(400).json({
+              ok: false,
+              message: "Each industry must be at least 10%"
+            });
+          }
+          totalPercentage += industry.percentage;
+        }
+        if (totalPercentage > 100) {
+          return res.status(400).json({
+            ok: false,
+            message: "Total industry percentage cannot exceed 100%"
+          });
+        }
+      } catch (parseError) {
+        console.error("Industries parse error:", parseError);
+      }
+    }
+
+    // Parse industry tags if provided
+    let parsedIndustryTags = [];
+    if (industryTags) {
+      try {
+        parsedIndustryTags = JSON.parse(industryTags);
+      } catch (parseError) {
+        // If JSON parsing fails, treat as comma-separated string
+        parsedIndustryTags = industryTags.toString().split(',').map(tag => tag.trim());
+      }
+    }
+
+    // Parse clients if provided
+    let parsedClients = [];
+    if (clients) {
+      try {
+        parsedClients = JSON.parse(clients);
+        // Validate clients: each client must be ≥10% and total cannot exceed 100%
+        let totalPercentage = 0;
+        for (const client of parsedClients) {
+          if (client.percentage < 10) {
+            return res.status(400).json({
+              ok: false,
+              message: "Each client segment must be at least 10%"
+            });
+          }
+          totalPercentage += client.percentage;
+        }
+        if (totalPercentage > 100) {
+          return res.status(400).json({
+            ok: false,
+            message: "Total client percentage cannot exceed 100%"
+          });
+        }
+      } catch (parseError) {
+        console.error("Clients parse error:", parseError);
+      }
+    }
+
     // Create new listing request
     const newRequest = new CompanyListingRequest({
       user: userId,
@@ -162,6 +287,13 @@ export const submitCompanyListing = async (req, res) => {
       subcategoryId,
       image: imageUrl,
       teamLeads: parsedTeamLeads,
+      minimumProjectSize: minimumProjectSize ? parseInt(minimumProjectSize) : null,
+      hourlyRate: hourlyRate ? parseFloat(hourlyRate) : null,
+      services: parsedServices,
+      focus: parsedFocus,
+      industries: parsedIndustries,
+      industryTags: parsedIndustryTags,
+      clients: parsedClients, // Add clients data
       status: "pending"
     });
 
@@ -242,8 +374,8 @@ export const approveListingRequest = async (req, res) => {
   const adminUserId = req.user?.userId; // From auth middleware (admin)
 
   try {
-    // Find the request
-    const request = await CompanyListingRequest.findById(requestId).populate('user', 'email');
+    // Find the request (no populate needed as we want all fields)
+    const request = await CompanyListingRequest.findById(requestId);
     if (!request) {
       return res.status(404).json({
         ok: false,
@@ -290,9 +422,22 @@ export const approveListingRequest = async (req, res) => {
         companyCountry: request.companyCountry,
         foundedYear: request.foundedYear,
         image: request.image,
-        claimedBy: request.user, // Automatically claim the company for the user
+        claimedBy: request.user, // Automatically claim the company
         submittedThroughListingForm: true, // Mark as submitted through listing form
-        teamLeads: request.teamLeads
+        teamLeads: request.teamLeads,
+        // Added new fields
+        minimumProjectSize: request.minimumProjectSize,
+        hourlyRate: request.hourlyRate,
+        // Service lines field
+        services: request.services,
+        // Focus areas field
+        focus: request.focus,
+        // Industries field (chart data)
+        industries: request.industries,
+        // Industry tags field
+        industryTags: request.industryTags,
+        // Clients field
+        clients: request.clients
       });
 
       await newCompany.save();
@@ -378,6 +523,122 @@ export const getCategoriesWithSubcategories = async (req, res) => {
       categories
     });
   } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+};
+
+// Get company services by company ID
+export const getCompanyServices = async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    
+    // Find the company by ID
+    const company = await CompanyTeamData.findById(companyId);
+    
+    if (!company) {
+      return res.status(404).json({
+        ok: false,
+        message: "Company not found"
+      });
+    }
+    
+    return res.status(200).json({
+      ok: true,
+      services: company.services || []
+    });
+  } catch (err) {
+    console.error("Error fetching company services:", err);
+    return res.status(500).json({
+      ok: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+};
+
+// Get company focus by company ID
+export const getCompanyFocus = async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    
+    // Find the company by ID
+    const company = await CompanyTeamData.findById(companyId);
+    
+    if (!company) {
+      return res.status(404).json({
+        ok: false,
+        message: "Company not found"
+      });
+    }
+    
+    return res.status(200).json({
+      ok: true,
+      focus: company.focus || []
+    });
+  } catch (err) {
+    console.error("Error fetching company focus:", err);
+    return res.status(500).json({
+      ok: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+};
+
+// Get company industries by company ID
+export const getCompanyIndustries = async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    
+    // Find the company by ID
+    const company = await CompanyTeamData.findById(companyId);
+    
+    if (!company) {
+      return res.status(404).json({
+        ok: false,
+        message: "Company not found"
+      });
+    }
+    
+    return res.status(200).json({
+      ok: true,
+      industries: company.industries || []
+    });
+  } catch (err) {
+    console.error("Error fetching company industries:", err);
+    return res.status(500).json({
+      ok: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+};
+
+// Get company clients by company ID
+export const getCompanyClients = async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    
+    // Find the company by ID
+    const company = await CompanyTeamData.findById(companyId);
+    
+    if (!company) {
+      return res.status(404).json({
+        ok: false,
+        message: "Company not found"
+      });
+    }
+    
+    return res.status(200).json({
+      ok: true,
+      clients: company.clients || []
+    });
+  } catch (err) {
+    console.error("Error fetching company clients:", err);
     return res.status(500).json({
       ok: false,
       message: "Server error",

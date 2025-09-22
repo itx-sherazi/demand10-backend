@@ -12,7 +12,7 @@ This link will expire in 24 hours.
 Thank you for signing up!
 
 Best regards,
-IntentWire Team`,
+Demand10 Team`,
     html: `<!DOCTYPE html>
 <html>
 <head>
@@ -65,10 +65,10 @@ IntentWire Team`,
     <tr>
       <td style="padding: 20px 30px; background-color: #f8f8f8; text-align: center;">
         <p style="color: #999999; font-size: 12px; margin: 0;">
-          &copy; ${new Date().getFullYear()} IntentWire. All rights reserved.
+          &copy; ${new Date().getFullYear()} Demand10. All rights reserved.\r
         </p>
         <p style="color: #999999; font-size: 12px; margin: 5px 0 0 0;">
-          <a href="https://intentwire.com" style="color: #139692; text-decoration: none;">https://intentwire.com</a>
+          <a href="https://demand10.com" style="color: #139692; text-decoration: none;">https://demand10.com</a>\r
         </p>
       </td>
     </tr>
@@ -90,7 +90,7 @@ This link will expire in 1 hour.
 If you did not request this, please ignore this email.
 
 Best regards,
-IntentWire Team`,
+Demand10 Team`,
     html: `<!DOCTYPE html>
 <html>
 <head>
@@ -143,10 +143,10 @@ IntentWire Team`,
     <tr>
       <td style="padding: 20px 30px; background-color: #f8f8f8; text-align: center;">
         <p style="color: #999999; font-size: 12px; margin: 0;">
-          &copy; ${new Date().getFullYear()} IntentWire. All rights reserved.
+          &copy; ${new Date().getFullYear()} Demand10. All rights reserved.\r\n
         </p>
         <p style="color: #999999; font-size: 12px; margin: 5px 0 0 0;">
-          <a href="https://intentwire.com" style="color: #139692; text-decoration: none;">https://intentwire.com</a>
+          <a href="https://demand10.com" style="color: #139692; text-decoration: none;">https://demand10.com</a>\r\n
         </p>
       </td>
     </tr>

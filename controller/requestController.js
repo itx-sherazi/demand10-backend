@@ -57,9 +57,9 @@ ${message}
 
     await sendEmail({
       to: email,
-      subject: " We've received your request at IntentWire",
+      subject: " We've received your request at demand10",
       html: clientEmailHTML,
-      text: `Hi ${fullName},\n\nThanks for contacting us! We have received your request and will respond shortly.\n\n- The IntentWire Team`,
+      text: `Hi ${fullName},\n\nThanks for contacting us! We have received your request and will respond shortly.\n\n- The Demand10 Team`,
     });
 
     res.status(201).json({

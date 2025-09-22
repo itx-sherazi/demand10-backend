@@ -384,7 +384,7 @@ async function fetchCompaniesFromDB(slug, page, limit, search, sponsoredOnly = f
 
   const companies = await CompanyTeamData.find(query)
     .select(
-      "-__v -linkedinUrl -facebookUrl -twitterUrl -description"
+      "-__v -linkedinUrl -facebookUrl -twitterUrl "
     )
     .populate({
       path: 'subcategory',
@@ -595,7 +595,7 @@ export const getCompanyBySubcategoryAndSlug = async (req, res) => {
           description: anyCompany.description || '',
           foundedYear: anyCompany.foundedYear || null,
           employees: anyCompany.employees || 0,
-          industries: Array.isArray(anyCompany.industries) ? anyCompany.industries : [],
+          industryTags: Array.isArray(anyCompany.industryTags) ? anyCompany.industryTags : [],
           teamLeads: Array.isArray(anyCompany.teamLeads) ? anyCompany.teamLeads : [],
           companyCountry: anyCompany.companyCountry || '',
           image: anyCompany.image || '/placeholder-logo.png',
@@ -642,7 +642,7 @@ export const getCompanyBySubcategoryAndSlug = async (req, res) => {
       description: company.description || '',
       foundedYear: company.foundedYear || null,
       employees: company.employees || 0,
-      industries: Array.isArray(company.industries) ? company.industries : [],
+      industryTags: Array.isArray(company.industryTags) ? company.industryTags : [],
       teamLeads: Array.isArray(company.teamLeads) ? company.teamLeads : [],
       companyCountry: company.companyCountry || '',
       image: company.image || '/placeholder-logo.png',

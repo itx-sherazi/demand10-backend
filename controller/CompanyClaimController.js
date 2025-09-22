@@ -203,11 +203,11 @@ Claim Details:
 Please review this claim in the admin dashboard and either approve or reject it.
 
 Best regards,
-IntentWire System`;
+demand10 System`;
 
     // Send email to admin
     await sendClaimNotificationEmail({
-      to: process.env.ADMIN_EMAIL || "admin@intentwire.com",
+      to: process.env.ADMIN_EMAIL || "admin@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -363,20 +363,20 @@ const approveClaim = async (req, res) => {
 Great news! Your claim request for "${claim.companyName}" has been approved by our admin team.
 
 You can now edit your company information by visiting your dashboard:
-https://intentwire.com/user-dashboard
+https://demand10.com/user-dashboard
 
 Here are the next steps:
-1. Visit your dashboard at https://intentwire.com/user-dashboard
+1. Visit your dashboard at https://demand10.com/user-dashboard
 2. Navigate to "Edit Companies" section
 3. Find your company "${claim.companyName}" and click "Edit"
 4. Update your company details, add images, and enhance your listing
 
-Need help? Contact our support team at info@intentwire.com
+Need help? Contact our support team at info@demand10.com
 
-Thank you for choosing IntentWire!
+Thank you for choosing demand10!
 
 Best regards,
-IntentWire Team`;
+demand10 Team`;
 
     await sendClaimNotificationEmail({
       to: claim.userEmail,
@@ -461,13 +461,13 @@ Our team reviewed your claim request and determined that it did not meet our ver
 
 What you can do:
 1. Review the information you provided and ensure it's accurate
-2. Contact our support team at info@intentwire.com for more details
+2. Contact our support team at info@demand10.com for more details
 3. Submit a new claim with complete and accurate information
 
-We appreciate your interest in IntentWire and hope you'll try again.
+We appreciate your interest in demand10 and hope you'll try again.
 
 Best regards,
-IntentWire Team`;
+demand10 Team`;
 
     await sendClaimNotificationEmail({
       to: claim.userEmail,
