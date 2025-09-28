@@ -33,6 +33,8 @@ const allowedOrigins = [
   'https://demand10.com',
   'https://www.demand10.com',
   'https://api.demand10.com',
+  'https://vendor.demand10.com',
+  'https://dashboard.demand10.com',
   "http://localhost:5173"
 ];
 
