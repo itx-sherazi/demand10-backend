@@ -1,10 +1,16 @@
 import xlsx from "xlsx";
 import CompanyTeamData from "../model/TeamCompany.js";
 import Subcategory from "../model/Subcategory.js";
-import CompanyClaim from "../model/CompanyClaim.js"; // Add this import
-import mongoose from "mongoose";
-import cloudinary from "../utils/cloudinary.js";
-import CompanyListingRequest from "../model/CompanyListingRequest.js";
+import CompanyClaim from "../model/CompanyClaim.js";
+import { Readable } from "stream";
+import csv from "csv-parser";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+// Get the directory name in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -238,6 +244,8 @@ export const uploadCompaniesToSubcategory = async (req, res) => {
             subcategory: subcategory._id,
             submittedThroughListingForm: false, // Explicitly set to false for manually added companies
             teamLeads: [],
+            createdAt: new Date(), // Explicitly set creation date
+            updatedAt: new Date() // Explicitly set update date
           },
         },
       });
@@ -416,16 +424,26 @@ export const uploadCompaniesToSubcategory = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("❌ Upload Error:", err.message);
-    console.error("Stack trace:", err.stack);
-
+    // Log the full error for debugging
+    console.error('Error in uploadCompaniesToSubcategory:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while uploading companies';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       success: false,
       message: "Server error occurred. Please try again.",
-      error:
-        process.env.NODE_ENV === "development"
-          ? err.message
-          : "Internal server error",
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };
@@ -460,10 +478,26 @@ export const getCompanyById = async (req, res) => {
       data: company,
     });
   } catch (err) {
+    // Log the full error for debugging
+    console.error('Error in getCompanyById:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while fetching company';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       success: false,
       message: "Server error",
-      error: err.message,
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };
@@ -490,10 +524,26 @@ export const getCompanyBySlug = async (req, res) => {
       data: company,
     });
   } catch (err) {
+    // Log the full error for debugging
+    console.error('Error in getCompanyBySlug:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while fetching company';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       success: false,
       message: "Server error",
-      error: err.message,
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };
@@ -544,10 +594,26 @@ export const searchCompanies = async (req, res) => {
       data: companies,
     });
   } catch (err) {
+    // Log the full error for debugging
+    console.error('Error in searchCompanies:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while searching companies';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       ok: false,
       message: "Server error",
-      error: err.message,
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };
@@ -611,106 +677,26 @@ export const getAllCompaniesCategory = async (req, res) => {
       }
     });
   } catch (err) {
+    // Log the full error for debugging
+    console.error('Error in getAllCompaniesCategory:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while fetching companies';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       ok: false,
       message: "Server error occurred while fetching companies",
-      error: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
-    });
-  }
-};
-
-// 🆕 Update Company with Team Leads by ID
-export const updateCompanyTeam = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { teamLeads, industries, industryTags, ...companyData } = req.body;
-
-    // Parse JSON strings if they exist
-    let parsedTeamLeads = [];
-    let parsedIndustries = [];
-    let parsedIndustryTags = [];
-
-    if (teamLeads) {
-      try {
-        parsedTeamLeads = typeof teamLeads === 'string' ? JSON.parse(teamLeads) : teamLeads;
-      } catch (error) {
-        parsedTeamLeads = [];
-      }
-    }
-
-    if (industries) {
-      try {
-        parsedIndustries = typeof industries === 'string' ? JSON.parse(industries) : industries;
-      } catch (error) {
-        parsedIndustries = typeof industries === 'string' ? industries.split(',').map(i => i.trim()) : industries;
-      }
-    }
-
-    if (industryTags) {
-      try {
-        parsedIndustryTags = typeof industryTags === 'string' ? JSON.parse(industryTags) : industryTags;
-      } catch (error) {
-        parsedIndustryTags = typeof industryTags === 'string' ? industryTags.split(',').map(i => i.trim()) : industryTags;
-      }
-    }
-
-    // Build update object
-    const updateData = {
-      ...companyData,
-      teamLeads: parsedTeamLeads,
-      industries: parsedIndustries,
-      industryTags: parsedIndustryTags
-    };
-
-    // Handle image upload if present
-    if (req.file) {
-      // First, get the existing company to check for old image
-      const existingCompany = await CompanyTeamData.findById(id);
-      
-      // If there's an existing image and a new image is being uploaded, delete the old one
-      if (existingCompany && existingCompany.image) {
-        try {
-          // Extract public ID from Cloudinary URL more reliably
-          const urlParts = existingCompany.image.split('/');
-          const fileName = urlParts[urlParts.length - 1];
-          const publicId = fileName.split('.')[0];
-          await cloudinary.uploader.destroy(`bussiness/${publicId}`);
-        } catch (deleteError) {
-          console.error('Error deleting old image:', deleteError);
-          // Don't fail the update if image deletion fails
-        }
-      }
-      
-      updateData.image = req.file.path; // Cloudinary URL
-    }
-
-    // Update company
-    const updatedCompany = await CompanyTeamData.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true, runValidators: true }
-    ).populate({
-      path: 'subcategory',
-      select: 'name slug',
-    });
-
-    if (!updatedCompany) {
-      return res.status(404).json({
-        ok: false,
-        message: "Company not found"
-      });
-    }
-
-    res.status(200).json({
-      ok: true,
-      message: "Company updated successfully",
-      data: updatedCompany
-    });
-  } catch (err) {
-    res.status(500).json({
-      ok: false,
-      message: "Server error occurred while updating company",
-      error: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };
@@ -719,10 +705,13 @@ export const updateCompanyTeam = async (req, res) => {
 export const updateCompanyTeamBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    const { teamLeads, industries, industryTags, ...companyData } = req.body;
+    const { teamLeads, services, focus, clients, industries, industryTags, ...companyData } = req.body;
 
     // Parse JSON strings if they exist
     let parsedTeamLeads = [];
+    let parsedServices = [];
+    let parsedFocus = [];
+    let parsedClients = [];
     let parsedIndustries = [];
     let parsedIndustryTags = [];
 
@@ -734,11 +723,66 @@ export const updateCompanyTeamBySlug = async (req, res) => {
       }
     }
 
+    // Parse services array
+    if (services) {
+      try {
+        parsedServices = typeof services === 'string' ? JSON.parse(services) : services;
+      } catch (error) {
+        parsedServices = [];
+      }
+    }
+
+    // Parse focus array
+    if (focus) {
+      try {
+        parsedFocus = typeof focus === 'string' ? JSON.parse(focus) : focus;
+      } catch (error) {
+        parsedFocus = [];
+      }
+    }
+
+    // Parse clients array
+    if (clients) {
+      try {
+        parsedClients = typeof clients === 'string' ? JSON.parse(clients) : clients;
+      } catch (error) {
+        parsedClients = [];
+      }
+    }
+
     if (industries) {
       try {
         parsedIndustries = typeof industries === 'string' ? JSON.parse(industries) : industries;
+        
+        // Validate that we have the correct structure
+        if (Array.isArray(parsedIndustries)) {
+          // Transform simple strings to object format if needed
+          parsedIndustries = parsedIndustries.map(industry => {
+            if (typeof industry === 'string') {
+              // Convert old string format to new object format
+              return {
+                industryName: industry,
+                percentage: 10 // Default percentage
+              };
+            } else if (typeof industry === 'object' && industry.industryName && industry.percentage) {
+              // Already in correct format
+              return industry;
+            } else {
+              // Fallback for malformed data
+              return {
+                industryName: String(industry),
+                percentage: 10
+              };
+            }
+          });
+        }
       } catch (error) {
-        parsedIndustries = typeof industries === 'string' ? industries.split(',').map(i => i.trim()) : industries;
+        // Fallback: treat as comma-separated string
+        const industryStrings = typeof industries === 'string' ? industries.split(',').map(i => i.trim()) : [];
+        parsedIndustries = industryStrings.map(industryName => ({
+          industryName,
+          percentage: 10
+        }));
       }
     }
 
@@ -754,6 +798,9 @@ export const updateCompanyTeamBySlug = async (req, res) => {
     const updateData = {
       ...companyData,
       teamLeads: parsedTeamLeads,
+      services: parsedServices,
+      focus: parsedFocus,
+      clients: parsedClients,
       industries: parsedIndustries,
       industryTags: parsedIndustryTags
     };
@@ -763,21 +810,49 @@ export const updateCompanyTeamBySlug = async (req, res) => {
       // First, get the existing company to check for old image
       const existingCompany = await CompanyTeamData.findOne({ slug });
       
+      // Log information for debugging
+      console.log('Updating company with slug:', slug);
+      console.log('New file uploaded:', req.file);
+      console.log('Existing company:', existingCompany ? 'Found' : 'Not found');
+      
       // If there's an existing image and a new image is being uploaded, delete the old one
       if (existingCompany && existingCompany.image) {
         try {
-          // Extract public ID from Cloudinary URL more reliably
-          const urlParts = existingCompany.image.split('/');
-          const fileName = urlParts[urlParts.length - 1];
-          const publicId = fileName.split('.')[0];
-          await cloudinary.uploader.destroy(`bussiness/${publicId}`);
+          // Log the image path for debugging
+          console.log('Existing company image path:', existingCompany.image);
+          
+          // Construct the full path to the old image file
+          // The existingCompany.image is stored as "/uploads/listing-images/filename.ext"
+          // We need to join it with the backend root directory
+          const backendRoot = path.join(__dirname, '..');
+          const oldImagePath = path.join(backendRoot, existingCompany.image);
+          
+          // Log the full path for debugging
+          console.log('Full path to old image:', oldImagePath);
+          console.log('Old image file exists:', fs.existsSync(oldImagePath));
+          
+          // Check if file exists and delete it
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+            console.log(`Deleted old image file: ${oldImagePath}`);
+          } else {
+            console.log(`Old image file not found: ${oldImagePath}`);
+            // Also log the directory contents for debugging
+            const uploadDir = path.join(backendRoot, 'uploads', 'listing-images');
+            if (fs.existsSync(uploadDir)) {
+              const files = fs.readdirSync(uploadDir);
+              console.log('Files in listing-images directory:', files);
+            }
+          }
         } catch (deleteError) {
           console.error('Error deleting old image:', deleteError);
           // Don't fail the update if image deletion fails
         }
       }
       
-      updateData.image = req.file.path; // Cloudinary URL
+      // Save the local path to the image
+      updateData.image = `/uploads/listing-images/${req.file.filename}`;
+      console.log('New image path:', updateData.image);
     }
 
     // Update company
@@ -803,10 +878,26 @@ export const updateCompanyTeamBySlug = async (req, res) => {
       data: updatedCompany
     });
   } catch (err) {
+    // Log the full error for debugging
+    console.error('Error in updateCompanyTeamBySlug:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while updating company';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       ok: false,
       message: "Server error occurred while updating company",
-      error: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };
@@ -824,6 +915,40 @@ export const deleteCompanyTeam = async (req, res) => {
         ok: false,
         message: "Company not found"
       });
+    }
+
+    // If the company has an image, delete the image file
+    if (deletedCompany.image) {
+      try {
+        // Log the image path for debugging
+        console.log('Deleting company image:', deletedCompany.image);
+        
+        // Construct the full path to the image file
+        // The deletedCompany.image is stored as "/uploads/listing-images/filename.ext"
+        // We need to join it with the backend root directory
+        const backendRoot = path.join(__dirname, '..');
+        const imagePath = path.join(backendRoot, deletedCompany.image);
+        
+        // Log the full path for debugging
+        console.log('Full path to company image:', imagePath);
+        
+        // Check if file exists and delete it
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+          console.log(`Deleted company image file: ${imagePath}`);
+        } else {
+          console.log(`Company image file not found: ${imagePath}`);
+          // Also log the directory contents for debugging
+          const uploadDir = path.join(backendRoot, 'uploads', 'listing-images');
+          if (fs.existsSync(uploadDir)) {
+            const files = fs.readdirSync(uploadDir);
+            console.log('Files in listing-images directory:', files);
+          }
+        }
+      } catch (imageError) {
+        console.error("Error deleting company image file:", imageError);
+        // We don't return here because we still want to delete the company
+      }
     }
 
     // If the company was claimed, reset the associated claim status
@@ -860,10 +985,26 @@ export const deleteCompanyTeam = async (req, res) => {
       data: deletedCompany
     });
   } catch (err) {
+    // Log the full error for debugging
+    console.error('Error in deleteCompanyTeam:', err);
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Server error occurred while deleting company';
+    
+    if (err.name === 'ValidationError') {
+      errorMessage = 'Validation error: ' + Object.values(err.errors).map(e => e.message).join(', ');
+    } else if (err.name === 'CastError') {
+      errorMessage = 'Invalid data format: ' + err.message;
+    } else if (err.code === 11000) {
+      errorMessage = 'Duplicate key error: ' + Object.keys(err.keyPattern).join(', ') + ' already exists';
+    } else if (err.message) {
+      errorMessage = err.message;
+    }
+    
     res.status(500).json({
       ok: false,
       message: "Server error occurred while deleting company",
-      error: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
+      error: process.env.NODE_ENV === "development" ? errorMessage : "Internal server error",
     });
   }
 };

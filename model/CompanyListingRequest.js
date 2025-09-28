@@ -8,15 +8,12 @@ const companyListingRequestSchema = new mongoose.Schema({
   },
   companyName: {
     type: String,
-    required: true
   },
   companyEmail: {
     type: String,
-    required: true
   },
   companyPhone: {
     type: String,
-    required: true
   },
   website: {
     type: String
@@ -62,28 +59,28 @@ const companyListingRequestSchema = new mongoose.Schema({
   }],
   // Added new fields
   minimumProjectSize: {
-    type: Number
+    type: String  // Changed from Number to String to support ranges like "$1k - $5k"
   },
   hourlyRate: {
-    type: Number
+    type: String  // Changed from Number to String to support ranges like "$25 - $49"
   },
   // Service lines field
   services: [{
-    serviceName: { type: String, required: true },
-    category: { type: String, required: true },
-    percentage: { type: Number, required: true, min: 10, max: 100 }
+    serviceName: { type: String },
+    category: { type: String },
+    percentage: { type: Number, min: 10, max: 100 }
   }],
   // Focus areas field
   focus: [{
-    focusName: { type: String, required: true },
-    category: { type: String, required: true },
-    percentage: { type: Number, required: true, min: 10, max: 100 }
+    focusName: { type: String },
+    category: { type: String },
+    percentage: { type: Number, min: 10, max: 100 }
   }],
   
   // Industries field (for graph data)
   industries: [{
-    industryName: { type: String, required: true },
-    percentage: { type: Number, required: true, min: 10, max: 100 }
+    industryName: { type: String },
+    percentage: { type: Number, min: 10, max: 100 }
   }],
   
   // Industry tags field (simple string array)
@@ -91,8 +88,8 @@ const companyListingRequestSchema = new mongoose.Schema({
   
   // Clients field
   clients: [{
-    clientSegment: { type: String, required: true },
-    percentage: { type: Number, required: true, min: 10, max: 100 }
+    clientSegment: { type: String },
+    percentage: { type: Number, min: 10, max: 100 }
   }],
   
   status: {

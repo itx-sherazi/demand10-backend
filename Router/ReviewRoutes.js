@@ -8,7 +8,8 @@ import {
   approveReview,
   rejectReview,
   getCompanyWithRating,
-  deleteReview
+  deleteReview,
+  getVendorCompanyReviews
 } from "../controller/ReviewController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { adminAuthMiddleware } from "../middleware/adminAuthMiddleware.js";
@@ -27,6 +28,9 @@ router.get("/company-by-slug/:slug", getCompanyWithRating);
 // User routes (authenticated)
 router.post("/submit", authMiddleware, submitReview);
 router.get("/user-reviews", authMiddleware, getUserReviews);
+
+// New vendor-specific routes (authenticated)
+router.get("/vendor-company-reviews", authMiddleware, getVendorCompanyReviews);
 
 // Admin routes (authenticated admin)
 router.get("/all", adminAuthMiddleware, getAllReviews);

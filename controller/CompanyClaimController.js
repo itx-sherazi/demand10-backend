@@ -257,24 +257,60 @@ const getAllClaims = async (req, res) => {
 };
 
 // Get claims by user (for website users)
+// This includes both actual claims and companies submitted through listing form
 const getUserClaims = async (req, res) => {
   const userId = req.user?.userId; // From auth middleware
 
   try {
+    // Get actual claims
     const claims = await CompanyClaim.find({ user: userId })
       .populate({
         path: 'company',
         populate: {
           path: 'subcategory',
-          select: 'name slug' // Added slug to the selected fields
+          select: 'name slug'
         }
       })
       .sort({ createdAt: -1 });
 
+    // Get companies submitted through listing form by this user
+    const listedCompanies = await CompanyTeamData.find({
+      claimedBy: userId,
+      submittedThroughListingForm: true
+    })
+      .populate({
+        path: 'subcategory',
+        select: 'name slug'
+      })
+      .sort({ createdAt: -1 });
+
+    // Convert listed companies to claim-like format for consistency
+    const listedCompaniesAsClaims = listedCompanies.map(company => {
+      // Use company creation date, or fallback to current date if not available
+      const creationDate = company.createdAt || company.updatedAt || new Date();
+      
+      return {
+        _id: `listed_${company._id}`, // Unique identifier
+        user: userId,
+        company: company,
+        companyName: company.companyName,
+        status: 'approved', // Listed companies are automatically approved
+        createdAt: creationDate,
+        approvedAt: creationDate,
+        submittedThroughListingForm: true // Flag to identify listed companies
+      };
+    });
+
+    // Combine both arrays
+    const allClaims = [...claims, ...listedCompaniesAsClaims];
+    
+    // Sort by creation date (most recent first)
+    allClaims.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     return res.status(200).json({
       ok: true,
-      count: claims.length,
-      claims
+      count: allClaims.length,
+      claims: allClaims
     });
   } catch (err) {
     return res.status(500).json({

@@ -197,6 +197,119 @@ export const getUserReviews = async (req, res) => {
   }
 };
 
+// Get reviews for companies that the vendor has edit access to
+export const getVendorCompanyReviews = async (req, res) => {
+  const userId = req.user?.userId; // From auth middleware
+  const { page = 1, limit = 10, companyId } = req.query;
+
+  if (!userId) {
+    return res.status(401).json({
+      ok: false,
+      message: "User not authenticated"
+    });
+  }
+
+  try {
+    let query = {};
+    
+    if (companyId) {
+      // If specific company requested, check edit access
+      const company = await CompanyTeamData.findById(companyId);
+      
+      if (!company) {
+        return res.status(404).json({
+          ok: false,
+          message: "Company not found"
+        });
+      }
+      
+      // Check if user has edit access to this company
+      const hasAccess = company.claimedBy && company.claimedBy.toString() === userId;
+      
+      if (!hasAccess) {
+        return res.status(403).json({
+          ok: false,
+          message: "Access denied. You don't have edit rights to this company."
+        });
+      }
+      
+      query.company = companyId;
+    } else {
+      // Get the primary company the user has claimed
+      // Priority: 1. Company submitted through listing form by this user, 2. First claimed company
+      const userCompanies = await CompanyTeamData.find({
+        claimedBy: userId
+      }).select('_id submittedThroughListingForm claimedBy').sort({ createdAt: -1 });
+      
+      if (userCompanies.length === 0) {
+        return res.status(200).json({
+          ok: true,
+          count: 0,
+          reviews: [],
+          totalCount: 0,
+          currentPage: parseInt(page),
+          totalPages: 0,
+          message: "No companies found with edit access"
+        });
+      }
+      
+      // Find the primary company for this user
+      // First priority: Companies submitted through listing form by this user
+      let primaryCompany = userCompanies.find(comp => comp.submittedThroughListingForm);
+      
+      // Second priority: First claimed company (if no companies were submitted through listing)
+      if (!primaryCompany) {
+        primaryCompany = userCompanies[0];
+      }
+      
+      if (!primaryCompany) {
+        return res.status(200).json({
+          ok: true,
+          count: 0,
+          reviews: [],
+          totalCount: 0,
+          currentPage: parseInt(page),
+          totalPages: 0,
+          message: "No companies found with edit access"
+        });
+      }
+      
+      // Query reviews only for the primary company
+      query.company = primaryCompany._id;
+    }
+
+    // Only show approved reviews
+    query.status = "approved";
+
+    // Get reviews with pagination
+    const reviews = await Review.find(query)
+      .populate("company", "companyName slug image")
+      .populate("user", "email") // Limited user info for privacy
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    // Get total count for pagination
+    const totalCount = await Review.countDocuments(query);
+
+    return res.status(200).json({
+      ok: true,
+      count: reviews.length,
+      totalCount,
+      reviews,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalCount / limit)
+    });
+  } catch (err) {
+    console.error("Error fetching vendor company reviews:", err);
+    return res.status(500).json({
+      ok: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+};
+
 // Get reviews for a specific company (for public display)
 export const getCompanyReviews = async (req, res) => {
   try {

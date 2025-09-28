@@ -16,10 +16,10 @@ import cacheRoutes from './Router/ClearCache.js';
 import companyListingRoutes from './Router/CompanyListingRoutes.js';
 import reviewRoutes from './Router/ReviewRoutes.js'; // Added Review Routes
 import badgeRoutes from './Router/BadgeRoutes.js'; // Added Badge Routes
-import badgeEmbedRoutes from './Router/BadgeEmbedRoutes.js'; // Added Badge Embed Routes
 import heroSearchRoutes from './Router/HeroSearchRoutes.js'; // Added Hero Search Routes
 
 import { client as redisClient, connectRedis } from "./config/redisClient.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -52,6 +52,9 @@ app.use(cookieParser());
 app.use('/badges', express.static(path.join(process.cwd(), 'public', 'badges')));
 app.use('/sponsor-badges', express.static(path.join(process.cwd(), 'public', 'sponsor-badges')));
 
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
 // Connect MongoDB
 connectDB();
 // Health check route
@@ -69,7 +72,6 @@ connectRedis()
     app.use('/api/v1', companyClaimRoutes);
     app.use('/api/v1', companyListingRoutes);
     app.use('/api/v1', reviewRoutes); // Added Review Routes
-    app.use('/api/v1', badgeEmbedRoutes); // Added Badge Embed Routes
     app.use('/api/v1', badgeRoutes); // Added Badge Routes
     app.use('/api/v1', heroSearchRoutes); // Added Hero Search Routes
 
@@ -79,7 +81,8 @@ connectRedis()
     app.use("/api/v1", CompanyTeamUpload);
     app.use('/api/v1', cacheRoutes);
 
-    
+    // Global error handler - should be the last middleware
+    app.use(errorHandler);
 
     // Start server
     const PORT = process.env.PORT || 4000;

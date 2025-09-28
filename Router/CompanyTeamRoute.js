@@ -4,7 +4,6 @@ import {
   getCompanyBySlug, 
   searchCompanies, 
   uploadCompaniesToSubcategory,
-  updateCompanyTeam,
   updateCompanyTeamBySlug, // Added new function
   deleteCompanyTeam,
   getCompanyById
@@ -36,9 +35,6 @@ router.get("/search-companies", searchCompanies);
 
 // 🆕 Get ALL companies with pagination and search
 router.get("/companies/all", adminAuthMiddleware, getAllCompaniesCategory);
-
-// 🆕 Update company with team leads (with image upload) - by ID
-router.put("/updateCompanyTeam/:id", adminAuthMiddleware, multer.single('image'), updateCompanyTeam);
 
 // 🆕 Update company with team leads (with image upload) - by slug
 router.put("/updateCompanyTeamBySlug/:slug",  multer.single('image'), updateCompanyTeamBySlug);

@@ -3,12 +3,12 @@ import Category from "../model/Category.js";
 import Subcategory from "../model/Subcategory.js";
 import CompanyTeamData from "../model/TeamCompany.js";
 
-import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
 import { Readable } from "stream";
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 // Import the new notification emails helper
 import {
   sendNewCompanyListingNotificationToAdmin,
@@ -24,45 +24,26 @@ const __dirname = path.dirname(__filename);
 // Load .env file with explicit path
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 
 
 // Multer configuration for file upload
-const storage = multer.memoryStorage();
-export const upload = multer({ storage: storage });
-
-// Helper function to upload image to Cloudinary
-const uploadImageToCloudinary = (buffer, folder = "company-listings") => {
-  return new Promise((resolve, reject) => {
-   
-    
-    // Check if Cloudinary is properly configured
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-      reject(new Error("Cloudinary configuration is missing. Please check your environment variables."));
-      return;
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Ensure the directory exists
+    const uploadDir = path.join(__dirname, '../uploads/listing-images');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
-    
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: folder },
-      (error, result) => {
-        if (error) {
-          console.error("Cloudinary upload error:", error);
-          reject(error);
-        } else {
-          console.log("Cloudinary upload successful:", result.secure_url);
-          resolve(result.secure_url);
-        }
-      }
-    );
-    Readable.from(buffer).pipe(uploadStream);
-  });
-};
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'listing-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+export const upload = multer({ storage: storage });
 
 // Submit a company listing request
 export const submitCompanyListing = async (req, res) => {
@@ -129,13 +110,10 @@ export const submitCompanyListing = async (req, res) => {
     // Handle image upload if provided
     let imageUrl = "";
     if (req.file) {
-      try {
-        imageUrl = await uploadImageToCloudinary(req.file.buffer);
-      } catch (uploadError) {
-        console.error("Image upload error:", uploadError);
-        // If image upload fails, we'll still proceed with the request but without the image
-        // This ensures users can still submit their listing even if image upload fails
-      }
+      // Save the local path to the image
+      imageUrl = `/uploads/listing-images/${req.file.filename}`;
+      console.log('New image uploaded:', imageUrl);
+      console.log('File saved at:', req.file.path);
     } else {
       console.log("No image file received in request");
     }
@@ -287,8 +265,8 @@ export const submitCompanyListing = async (req, res) => {
       subcategoryId,
       image: imageUrl,
       teamLeads: parsedTeamLeads,
-      minimumProjectSize: minimumProjectSize ? parseInt(minimumProjectSize) : null,
-      hourlyRate: hourlyRate ? parseFloat(hourlyRate) : null,
+      minimumProjectSize: minimumProjectSize || "",  // Keep as string since it's ranges like "$1k - $5k"
+      hourlyRate: hourlyRate || "",  // Keep as string since it's ranges like "$25 - $49"
       services: parsedServices,
       focus: parsedFocus,
       industries: parsedIndustries,
@@ -437,7 +415,10 @@ export const approveListingRequest = async (req, res) => {
         // Industry tags field
         industryTags: request.industryTags,
         // Clients field
-        clients: request.clients
+        clients: request.clients,
+        // Explicitly set creation date from the listing request
+        createdAt: request.createdAt || new Date(),
+        updatedAt: new Date()
       });
 
       await newCompany.save();
@@ -662,6 +643,37 @@ export const deleteListingRequest = async (req, res) => {
       });
     }
 
+    // If the request has an image, delete the image file
+    if (request.image) {
+      try {
+        // Log the image path for debugging
+        console.log('Deleting listing request image:', request.image);
+        
+        // Construct the full path to the image file
+        const imagePath = path.join(__dirname, '..', request.image);
+        
+        // Log the full path for debugging
+        console.log('Full path to listing request image:', imagePath);
+        
+        // Check if file exists and delete it
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+          console.log(`Deleted image file: ${imagePath}`);
+        } else {
+          console.log(`Image file not found: ${imagePath}`);
+          // Also log the directory contents for debugging
+          const uploadDir = path.join(__dirname, '..', 'uploads', 'listing-images');
+          if (fs.existsSync(uploadDir)) {
+            const files = fs.readdirSync(uploadDir);
+            console.log('Files in listing-images directory:', files);
+          }
+        }
+      } catch (imageError) {
+        console.error("Error deleting image file:", imageError);
+        // We don't return here because we still want to delete the listing request
+      }
+    }
+
     // If the request was approved, we should also try to delete the associated company
     let companyDeleted = false;
     if (request.status === 'approved') {
@@ -691,6 +703,22 @@ export const deleteListingRequest = async (req, res) => {
         
         // If we found the company, delete it
         if (company) {
+          // If the company has an image, delete the image file
+          if (company.image) {
+            try {
+              // Construct the full path to the image file
+              const imagePath = path.join(__dirname, '..', company.image);
+              // Check if file exists and delete it
+              if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+                console.log(`Deleted company image file: ${imagePath}`);
+              }
+            } catch (imageError) {
+              console.error("Error deleting company image file:", imageError);
+              // We don't return here because we still want to delete the company
+            }
+          }
+          
           // Remove company from subcategory's companies array
           await Subcategory.findByIdAndUpdate(
             request.subcategoryId,
