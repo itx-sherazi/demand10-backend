@@ -28,13 +28,12 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  "https://dashboard.demand10.com",
+  "https://admin.demand10.com",
   'http://145.79.6.178:3000',
   'https://demand10.com',
   'https://www.demand10.com',
   'https://api.demand10.com',
   'https://vendor.demand10.com',
-  'https://dashboard.demand10.com',
   "http://localhost:5173"
 ];
 

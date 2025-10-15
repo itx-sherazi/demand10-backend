@@ -701,7 +701,6 @@ export const getAllCompaniesCategory = async (req, res) => {
   }
 };
 
-// 🆕 Update Company with Team Leads by Slug
 export const updateCompanyTeamBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -805,31 +804,18 @@ export const updateCompanyTeamBySlug = async (req, res) => {
       industryTags: parsedIndustryTags
     };
 
-    // Handle image upload if present
     if (req.file) {
-      // First, get the existing company to check for old image
       const existingCompany = await CompanyTeamData.findOne({ slug });
       
-      // Log information for debugging
-      console.log('Updating company with slug:', slug);
-      console.log('New file uploaded:', req.file);
-      console.log('Existing company:', existingCompany ? 'Found' : 'Not found');
       
-      // If there's an existing image and a new image is being uploaded, delete the old one
+      
       if (existingCompany && existingCompany.image) {
         try {
-          // Log the image path for debugging
-          console.log('Existing company image path:', existingCompany.image);
-          
-          // Construct the full path to the old image file
-          // The existingCompany.image is stored as "/uploads/listing-images/filename.ext"
-          // We need to join it with the backend root directory
+       
           const backendRoot = path.join(__dirname, '..');
           const oldImagePath = path.join(backendRoot, existingCompany.image);
           
-          // Log the full path for debugging
-          console.log('Full path to old image:', oldImagePath);
-          console.log('Old image file exists:', fs.existsSync(oldImagePath));
+          
           
           // Check if file exists and delete it
           if (fs.existsSync(oldImagePath)) {
@@ -852,7 +838,6 @@ export const updateCompanyTeamBySlug = async (req, res) => {
       
       // Save the local path to the image
       updateData.image = `/uploads/listing-images/${req.file.filename}`;
-      console.log('New image path:', updateData.image);
     }
 
     // Update company
