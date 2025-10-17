@@ -18,25 +18,25 @@ Please review the review in the admin dashboard.`;
         <title>New Company Review Submitted</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">New Review Submitted</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Action Required</h2>
+          <h2 style="color: #1a365d;">Action Required</h2>
           
           <p>Hello Admin,</p>
           
           <p>A new review has been submitted for <strong>${companyName}</strong> and is pending your review.</p>
           
           <div style="background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0;">
-            <h3 style="color: #139692; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Review Details</h3>
+            <h3 style="color: #1a365d; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Review Details</h3>
             <p><strong>Company:</strong> ${companyName}</p>
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
             <a href="https://dashboard.demand10.com/" 
-               style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+               style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
               Review in Dashboard
             </a>
           </div>
@@ -52,7 +52,7 @@ Please review the review in the admin dashboard.`;
     `;
 
     const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL || "info@intentwire.com",
+      to: process.env.ADMIN_EMAIL || "info@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -90,19 +90,19 @@ Demand10 Team`;
         <title>Your Review has been Submitted!</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">Review Submitted!</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Thank You!</h2>
+          <h2 style="color: #1a365d;">Thank You!</h2>
           
           <p>Hello,</p>
           
           <p>Thank you for submitting your review for <strong>${companyName}</strong>. Our admin team will review your submission shortly.</p>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">What happens next?</h3>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">What happens next?</h3>
             <ul>
               <li>Our team will review your submission</li>
               <li>You'll receive a notification once it's approved or rejected</li>
@@ -159,19 +159,19 @@ Demand10 Team`;
         <title>Your Review Status Updated</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">🎉 Review Approved!</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Congratulations!</h2>
+          <h2 style="color: #1a365d;">Congratulations!</h2>
           
           <p>Hello,</p>
           
           <p>Great news! The status of your review for <strong>${companyName}</strong> has been updated to <strong>approved</strong> by our admin team.</p>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">Your Review is Live</h3>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">Your Review is Live</h3>
             <p>Your review is now visible on the company's profile page and will help other users make informed decisions.</p>
             
             
@@ -249,9 +249,9 @@ Demand10 Team`;
             </ul>
           </div>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">What you can do:</h3>
-            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@demand10.com" style="color: #139692;">info@demand10.com</a> with details about your submission.</p>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">What you can do:</h3>
+            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@demand10.com" style="color: #1a365d;">info@demand10.com</a> with details about your submission.</p>
           </div>
           
           <p>Thank you for your interest in Demand10.</p>
@@ -297,25 +297,25 @@ Please review the request in the admin dashboard.`;
         <title>New Company Listing Request</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">New Listing Request</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Action Required</h2>
+          <h2 style="color: #1a365d;">Action Required</h2>
           
           <p>Hello Admin,</p>
           
           <p>A new company listing request has been submitted for <strong>${companyName}</strong> and is pending your review.</p>
           
           <div style="background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0;">
-            <h3 style="color: #139692; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Company Details</h3>
+            <h3 style="color: #1a365d; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Company Details</h3>
             <p><strong>Company Name:</strong> ${companyName}</p>
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
             <a href="https://dashboard.Demand10.com/" 
-               style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+               style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
               Review in Dashboard
             </a>
           </div>
@@ -331,7 +331,7 @@ Please review the request in the admin dashboard.`;
     `;
 
     const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL || "info@intentwire.com",
+      to: process.env.ADMIN_EMAIL || "info@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -369,19 +369,19 @@ Demand10 Team`;
         <title>Your Company Listing Request has been Received!</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">Request Received!</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Thank You!</h2>
+          <h2 style="color: #1a365d;">Thank You!</h2>
           
           <p>Hello,</p>
           
           <p>Thank you for submitting your company listing request for <strong>${companyName}</strong>. Our admin team will review your request shortly.</p>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">What happens next?</h3>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">What happens next?</h3>
             <ul>
               <li>Our team will review your submission</li>
               <li>You'll receive a notification once it's approved or rejected</li>
@@ -438,24 +438,24 @@ Demand10 Team`;
         <title>Your Company Listing Request Status Updated</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">🎉 Listing Approved!</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Congratulations!</h2>
+          <h2 style="color: #1a365d;">Congratulations!</h2>
           
           <p>Hello,</p>
           
           <p>Great news! The status of your company listing request for <strong>${companyName}</strong> has been updated to <strong>approved</strong> by our admin team.</p>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">Your Listing is Live</h3>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">Your Listing is Live</h3>
             <p>Your company is now visible in the <strong>${subcategoryName}</strong> subcategory and will help potential customers find your business.</p>
             
             <div style="text-align: center; margin: 20px 0;">
               <a href="https://Demand10.com/${subcategoryName.toLowerCase().replace(/\s+/g, '-')}/${companyName.toLowerCase().replace(/\s+/g, '-')}" 
-                 style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                 style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
                 View Your Listing
               </a>
             </div>
@@ -531,9 +531,9 @@ Demand10 Team`;
             </ul>
           </div>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">What you can do:</h3>
-            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #139692;">info@Demand10.com</a> with details about your submission.</p>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">What you can do:</h3>
+            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #1a365d;">info@Demand10.com</a> with details about your submission.</p>
           </div>
           
           <p>Thank you for your interest in Demand10.</p>
@@ -584,19 +584,19 @@ Demand10 System`;
         <title>Review Deleted Successfully</title>
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #139692 0%, #4ecfc5 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
+        <div style="background: linear-gradient(135deg, #1a365d 0%, #1a365d 100%); padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="color: white; margin: 0;">Review Deleted</h1>
         </div>
         
         <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0;">
-          <h2 style="color: #139692;">Deletion Confirmed</h2>
+          <h2 style="color: #1a365d;">Deletion Confirmed</h2>
           
           <p>Hello Admin,</p>
           
           <p>The review for <strong>${companyName}</strong> has been successfully deleted from the system.</p>
           
           <div style="background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0;">
-            <h3 style="color: #139692; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Review Details</h3>
+            <h3 style="color: #1a365d; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Review Details</h3>
             <p><strong>Company:</strong> ${companyName}</p>
             <p><strong>Review ID:<s/strong> ${reviewId}</p>
             <p><strong>Review Status:</strong> ${reviewStatus}</p>
@@ -613,7 +613,7 @@ Demand10 System`;
     `;
 
     const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL || "info@intentwire.com",
+      to: process.env.ADMIN_EMAIL || "info@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -667,9 +667,9 @@ Demand10 Team`;
             <p>Your review was removed because it violated our community guidelines or terms of service.</p>
           </div>
           
-          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #4ecfc5; margin: 20px 0;">
-            <h3 style="color: #139692; margin-top: 0;">Have questions?</h3>
-            <p>If you have any questions about this removal, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #139692;">info@Demand10.com</a>.</p>
+          <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
+            <h3 style="color: #1a365d; margin-top: 0;">Have questions?</h3>
+            <p>If you have any questions about this removal, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #1a365d;">info@Demand10.com</a>.</p>
           </div>
           
           <p>Thank you for your understanding.</p>

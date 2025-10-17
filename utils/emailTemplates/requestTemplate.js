@@ -62,7 +62,7 @@ export const generateRequestEmail = ({
     }
     table td.label {
       font-weight: bold;
-      color: #139692;
+      color: #1a365d;
       text-transform: uppercase;
       font-size: 13px;
       width: 40%;
@@ -73,7 +73,7 @@ export const generateRequestEmail = ({
     .message-box {
       background-color: #f8f9fa;
       padding: 15px;
-      border-left: 4px solid #139692;
+      border-left: 4px solid #1a365d;
       border-radius: 4px;
       margin-top: 10px;
     }
@@ -89,7 +89,7 @@ export const generateRequestEmail = ({
 <body>
   <div class="container">
     <div class="header">
-      <img src="https://intentwire.com/images/logo.png" alt="Company Logo">
+      <img src="https://demand10.com/images/logo.png" alt="Company Logo">
       <h1>New Client Request</h1>
     </div>
 

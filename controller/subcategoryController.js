@@ -598,7 +598,7 @@ export const getCompanyBySubcategoryAndSlug = async (req, res) => {
           industryTags: Array.isArray(anyCompany.industryTags) ? anyCompany.industryTags : [],
           teamLeads: Array.isArray(anyCompany.teamLeads) ? anyCompany.teamLeads : [],
           companyCountry: anyCompany.companyCountry || '',
-          image: anyCompany.image || '/placeholder-logo.png',
+          image: anyCompany.image || '',
           website: anyCompany.website || '#',
           averageRating: parseFloat(averageRating.toFixed(1)),
           totalReviews: totalReviews
@@ -645,7 +645,7 @@ export const getCompanyBySubcategoryAndSlug = async (req, res) => {
       industryTags: Array.isArray(company.industryTags) ? company.industryTags : [],
       teamLeads: Array.isArray(company.teamLeads) ? company.teamLeads : [],
       companyCountry: company.companyCountry || '',
-      image: company.image || '/placeholder-logo.png',
+      image: company.image || '',
       website: company.website || '#',
       averageRating: parseFloat(averageRating.toFixed(1)),
       totalReviews: totalReviews

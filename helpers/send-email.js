@@ -15,7 +15,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
       Destination: {
         ToAddresses: [to],
       },
-      FromEmailAddress: "info@intentwire.com", // ✅ Must be a verified email/domain
+      FromEmailAddress: "info@demand10.com", // ✅ Must be a verified email/domain
       Content: {
         Simple: {
           Subject: {

@@ -47,7 +47,7 @@ export const generateClientConfirmationEmail = ({
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://intentwire.com/images/logo.png" alt="IntentWire Logo">
+            <img src="https://demand10.com/images/logo.png" alt="demand10 Logo">
         </div>
         
         <h2>Hi ${fullName},</h2>
@@ -66,10 +66,10 @@ export const generateClientConfirmationEmail = ({
         
         <p>If you have any urgent questions or need immediate assistance, feel free to reply directly to this email.</p>
         
-        <p>Best regards,<br>The IntentWire Team</p>
+        <p>Best regards,<br>The Demand10 Team</p>
         
         <div class="footer">
-            <p>© ${new Date().getFullYear()} IntentWire. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} Demand10. All rights reserved.</p>
         </div>
     </div>
 </body>

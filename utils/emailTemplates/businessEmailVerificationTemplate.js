@@ -32,7 +32,7 @@ Demand10 Team`,
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
   <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
     <tr>
-      <td align="center" style="padding: 40px 20px; background-color: #139692;">
+      <td align="center" style="padding: 40px 20px; background-color: #1a365d;">
         <h1 style="color: #ffffff; font-size: 28px; margin: 0;">Business Email Verification</h1>
       </td>
     </tr>
@@ -49,8 +49,8 @@ Demand10 Team`,
         </p>
         
         <div style="text-align: center; margin: 30px 0;">
-          <div style="display: inline-block; padding: 15px 30px; background-color: #f8f8f8; border: 2px dashed #139692; border-radius: 8px;">
-            <span style="font-size: 24px; font-weight: bold; color: #139692; letter-spacing: 5px;">${verificationCode}</span>
+          <div style="display: inline-block; padding: 15px 30px; background-color: #f8f8f8; border: 2px dashed #1a365d; border-radius: 8px;">
+            <span style="font-size: 24px; font-weight: bold; color: #1a365d; letter-spacing: 5px;">${verificationCode}</span>
           </div>
         </div>
         
@@ -69,7 +69,7 @@ Demand10 Team`,
           &copy; ${new Date().getFullYear()} Demand10. All rights reserved.
         </p>
         <p style="color: #999999; font-size: 12px; margin: 5px 0 0 0;">
-          <a href="https://demand10.com" style="color: #139692; text-decoration: none;">https://demand10.com</a>
+          <a href="https://demand10.com" style="color: #1a365d; text-decoration: none;">https://demand10.com</a>
         </p>
       </td>
     </tr>

@@ -7,6 +7,7 @@ import csv from "csv-parser";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 // Get the directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
