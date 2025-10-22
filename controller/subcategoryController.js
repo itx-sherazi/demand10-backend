@@ -125,6 +125,7 @@ export const editSubcategory = async (req, res) => {
     // Use optional chaining and default values to avoid destructuring errors
     let name = req.body?.name;
     let description = req.body?.description;
+     let content = req.body?.content; // Add content field
     let totalCompanies = req.body?.totalCompanies;
     let details = req.body?.details;
 
@@ -164,7 +165,12 @@ export const editSubcategory = async (req, res) => {
     if (description !== undefined) {
       subcategory.description = description;
     }
-
+ // Only update content if provided
+    let contentUpdated = false;
+    if (content !== undefined) {
+      subcategory.content = content;
+      contentUpdated = true;
+    }
     // Only update totalCompanies if provided
     if (totalCompanies !== undefined) {
       // Convert totalCompanies to Number if it's provided as a string
@@ -189,6 +195,20 @@ export const editSubcategory = async (req, res) => {
     }
 
     await subcategory.save();
+    // If content was updated, invalidate related Redis caches
+    if (contentUpdated) {
+      try {
+        // Delete cache keys related to this subcategory
+        const pattern = `companies:${subcategory.slug}:*`;
+        const keys = await redisClient.keys(pattern);
+        if (keys.length > 0) {
+          await redisClient.del(keys);
+          console.log(`✅ Invalidated ${keys.length} cache keys for subcategory: ${subcategory.slug}`);
+        }
+      } catch (cacheError) {
+        console.error("❌ Error invalidating cache:", cacheError);
+      }
+    }
 
     res.status(200).json({
       message: "Subcategory updated successfully 🚀",
@@ -238,7 +258,7 @@ export const getSubcategoryDetails = async (req, res) => {
     const { slug } = req.params;
 
     const subcategory = await Subcategory.findOne({ slug })
-      .select("name slug details totalCompanies") // 👈 slug bhi select kiya
+      .select("name slug details totalCompanies content") // 👈 slug bhi select kiya
       .lean();
 
     if (!subcategory) {
@@ -265,6 +285,7 @@ export const getSubcategoryDetails = async (req, res) => {
       slug: subcategory.slug, // 👈 slug response me add kar diya
       name: subcategory.name,
       details: subcategory.details,
+      content: subcategory.content, // 👈 Add content to response
       totalCompanies: subcategory.totalCompanies,
       sponsorCompanies: sponsorCompanies // Add sponsored companies to response
     });
@@ -809,5 +830,64 @@ export const updateCompanySponsorship = async (req, res) => {
       message: "Error updating company sponsorship", 
       error: err.message 
     });
+  }
+};
+// Add this new function to update subcategory content
+export const updateSubcategoryContent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    const subcategory = await Subcategory.findById(id);
+    if (!subcategory) {
+      return res.status(404).json({ message: "Subcategory not found." });
+    }
+
+    // Update the content field
+    subcategory.content = content || "";
+    await subcategory.save();
+
+    // Invalidate related Redis caches
+    try {
+      // Delete cache keys related to this subcategory
+      const pattern = `companies:${subcategory.slug}:*`;
+      const keys = await redisClient.keys(pattern);
+      if (keys.length > 0) {
+        await redisClient.del(keys);
+        console.log(`✅ Invalidated ${keys.length} cache keys for subcategory: ${subcategory.slug}`);
+      }
+    } catch (cacheError) {
+      console.error("❌ Error invalidating cache:", cacheError);
+    }
+
+    res.status(200).json({
+      message: "Subcategory content updated successfully",
+      subcategory,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error updating subcategory content", error: err.message });
+  }
+};
+
+// Add this new function to get subcategory by ID with content
+export const getSubcategoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const subcategory = await Subcategory.findById(id).select("name slug content");
+    
+    if (!subcategory) {
+      return res.status(404).json({ message: "Subcategory not found." });
+    }
+
+    res.status(200).json({
+      ok: true,
+      subcategory,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching subcategory", error: err.message });
   }
 };

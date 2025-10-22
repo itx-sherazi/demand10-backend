@@ -75,6 +75,7 @@ const subcategorySchema = new mongoose.Schema({
   name: { type: String },
   slug: { type: String, unique: true },
   description: { type: String, default: "" },
+  content: { type: String, default: "" }, // Add content field for rich text content
   totalCompanies: { type: Number }, // Changed from String to Number
   category: {
     type: mongoose.Schema.Types.ObjectId,

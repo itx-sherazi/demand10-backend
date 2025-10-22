@@ -19,7 +19,9 @@ import {
   getCompanyBySubcategoryAndSlug,
   getRelatedSubcategories,
   updateCompanySponsorship,
-  getHomepageCompanies // Add this import
+  getHomepageCompanies, // Add this import
+  updateSubcategoryContent,
+  getSubcategoryById
 } from "../controller/subcategoryController.js";
 import upload from "../middleware/multer.js";
 import { adminAuthMiddleware } from "../middleware/adminAuthMiddleware.js";
@@ -44,6 +46,14 @@ router.get("/subcategories", getAllSubcategories);
 router.put("/editsubcategories/:id", 
   adminAuthMiddleware,
   editSubcategory
+);
+router.put("/subcategory-content/:id", 
+  adminAuthMiddleware,
+  updateSubcategoryContent
+);
+router.get("/subcategory/:id", 
+  adminAuthMiddleware,
+  getSubcategoryById
 );
 router.delete("/deletesubcategories/:id", adminAuthMiddleware, deleteSubcategory);
 router.post("/related-companies", adminAuthMiddleware, getRelatedCompanies);
