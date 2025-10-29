@@ -207,7 +207,7 @@ demand10 System`;
 
     // Send email to admin
     await sendClaimNotificationEmail({
-      to: process.env.ADMIN_EMAIL || "admin@demand10.com",
+      to: process.env.ADMIN_EMAIL || "support@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -407,7 +407,7 @@ Here are the next steps:
 3. Find your company "${claim.companyName}" and click "Edit"
 4. Update your company details, add images, and enhance your listing
 
-Need help? Contact our support team at info@demand10.com
+Need help? Contact our support team at support@demand10.com
 
 Thank you for choosing demand10!
 
@@ -497,7 +497,7 @@ Our team reviewed your claim request and determined that it did not meet our ver
 
 What you can do:
 1. Review the information you provided and ensure it's accurate
-2. Contact our support team at info@demand10.com for more details
+2. Contact our support team at support@demand10.com for more details
 3. Submit a new claim with complete and accurate information
 
 We appreciate your interest in demand10 and hope you'll try again.

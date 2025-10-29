@@ -52,7 +52,7 @@ Please review the review in the admin dashboard.`;
     `;
 
     const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL || "info@demand10.com",
+      to: process.env.ADMIN_EMAIL || "support@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -213,7 +213,7 @@ export const sendReviewRejectedNotificationToUser = async (userEmail, companyNam
       
 The status of your review for ${companyName} has been updated to rejected by our admin team.
 
-If you believe this was an error, please contact our support team at info@demand10.com.
+If you believe this was an error, please contact our support team at support@demand10.com.
 
 Thank you for your interest in Demand10.
 
@@ -251,7 +251,7 @@ Demand10 Team`;
           
           <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
             <h3 style="color: #1a365d; margin-top: 0;">What you can do:</h3>
-            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@demand10.com" style="color: #1a365d;">info@demand10.com</a> with details about your submission.</p>
+            <p>If you believe this was an error, please contact our support team at <a href="mailto:support@demand10.com" style="color: #1a365d;">support@demand10.com</a> with details about your submission.</p>
           </div>
           
           <p>Thank you for your interest in Demand10.</p>
@@ -331,7 +331,7 @@ Please review the request in the admin dashboard.`;
     `;
 
     const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL || "info@demand10.com",
+      to: process.env.ADMIN_EMAIL || "support@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -495,7 +495,7 @@ export const sendCompanyListingRejectedNotificationToUser = async (userEmail, co
       
 The status of your company listing request for ${companyName} has been updated to rejected by our admin team.
 
-If you believe this was an error, please contact our support team at info@Demand10.com.
+If you believe this was an error, please contact our support team at support@demand10.com.
 
 Thank you for your interest in Demand10.
 
@@ -533,7 +533,7 @@ Demand10 Team`;
           
           <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
             <h3 style="color: #1a365d; margin-top: 0;">What you can do:</h3>
-            <p>If you believe this was an error, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #1a365d;">info@Demand10.com</a> with details about your submission.</p>
+            <p>If you believe this was an error, please contact our support team at <a href="mailto:support@demand10.com" style="color: #1a365d;">support@demand10.com</a> with details about your submission.</p>
           </div>
           
           <p>Thank you for your interest in Demand10.</p>
@@ -613,7 +613,7 @@ Demand10 System`;
     `;
 
     const result = await sendEmail({
-      to: process.env.ADMIN_EMAIL || "info@demand10.com",
+      to: process.env.ADMIN_EMAIL || "support@demand10.com",
       subject: adminEmailSubject,
       text: adminEmailText,
       html: adminEmailHtml
@@ -636,7 +636,7 @@ export const sendReviewDeletedNotificationToUser = async (userEmail, companyName
       
 We're writing to inform you that your review for ${companyName} has been removed from our system.
 
-If you have any questions about this removal, please contact our support team at info@Demand10.com.
+If you have any questions about this removal, please contact our support team at support@demand10.com.
 
 Thank you for your understanding.
 
@@ -669,7 +669,7 @@ Demand10 Team`;
           
           <div style="background-color: #e8f4f3; padding: 20px; border-radius: 8px; border-left: 5px solid #1a365d; margin: 20px 0;">
             <h3 style="color: #1a365d; margin-top: 0;">Have questions?</h3>
-            <p>If you have any questions about this removal, please contact our support team at <a href="mailto:info@Demand10.com" style="color: #1a365d;">info@Demand10.com</a>.</p>
+            <p>If you have any questions about this removal, please contact our support team at <a href="mailto:support@demand10.com" style="color: #1a365d;">support@demand10.com</a>.</p>
           </div>
           
           <p>Thank you for your understanding.</p>

@@ -1,48 +1,31 @@
-import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
+import nodemailer from 'nodemailer';
 
-const sesClient = new SESv2Client({
-  region: "us-east-1", // ✅ Replace with your actual region
-  credentials: {
-    accessKeyId: process.env.AWS_SES_KEY,
-    secretAccessKey: process.env.AWS_SES_SECRET,
+// Create transporter using Gmail SMTP
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: 'support@demand10.com',
+    pass: 'runq brbl jtky diyq', // App password
   },
 });
 
 const sendEmail = async ({ to, subject, text, html }) => {
   try {
-    
-    const params = {
-      Destination: {
-        ToAddresses: [to],
-      },
-      FromEmailAddress: "info@demand10.com", // ✅ Must be a verified email/domain
-      Content: {
-        Simple: {
-          Subject: {
-            Data: subject,
-            Charset: "UTF-8",
-          },
-          Body: {
-            Text: {
-              Data: text,
-              Charset: "UTF-8",
-            },
-            ...(html && {
-              Html: {
-                Data: html,
-                Charset: "UTF-8",
-              },
-            }),
-          },
-        },
-      },
+    // Define mail options
+    const mailOptions = {
+      from: '"Demand10 Support" <support@demand10.com>',
+      to,
+      subject,
+      text,
+      html,
     };
 
-    const command = new SendEmailCommand(params);
-    const response = await sesClient.send(command);
+    // Send email
+    const info = await transporter.sendMail(mailOptions);
     
-
-    return { success: true, messageId: response.MessageId };
+    return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error("❌ Email send failed:", error);
     return { success: false, error };
