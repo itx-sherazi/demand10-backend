@@ -621,7 +621,7 @@ export const searchCompanies = async (req, res) => {
 export const getAllCompaniesCategory = async (req, res) => {
   try {
     // Get query parameters
-    const { page = 1, limit = 50, search = '' } = req.query;
+    const { page = 1, limit = 50, search = '', searchType = 'company' } = req.query;
     
     // Convert to numbers
     const pageNum = parseInt(page, 10);
@@ -631,9 +631,28 @@ export const getAllCompaniesCategory = async (req, res) => {
     // Build search filter
     let searchFilter = {};
     if (search && search.trim() !== '') {
-      searchFilter = {
-        companyName: { $regex: search.trim(), $options: 'i' }
-      };
+      if (searchType === 'subcategory') {
+        // Search by subcategory name only
+        const matchingSubcategories = await Subcategory.find({
+          name: { $regex: search.trim(), $options: 'i' }
+        }).select('_id');
+        
+        const subcategoryIds = matchingSubcategories.map(sub => sub._id);
+        
+        searchFilter = {
+          subcategory: { $in: subcategoryIds }
+        };
+      } else if (searchType === 'employees') {
+        // Search by employees count
+        searchFilter = {
+          employees: { $regex: search.trim(), $options: 'i' }
+        };
+      } else {
+        // Default search by company name only
+        searchFilter = {
+          companyName: { $regex: search.trim(), $options: 'i' }
+        };
+      }
     }
 
     // Get total count for pagination (from ALL companies matching search)
