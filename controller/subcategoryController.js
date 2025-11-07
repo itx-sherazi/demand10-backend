@@ -275,7 +275,7 @@ export const getSubcategoryDetails = async (req, res) => {
       path: 'subcategory',
       select: 'name slug'
     })
-    .limit(5)
+    .limit(10)
     .lean();
 
     // Sirf details object return karna
