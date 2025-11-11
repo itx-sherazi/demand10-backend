@@ -69,6 +69,14 @@ const detailsSchema = new mongoose.Schema({
     cloudShift: { type: Number, default: 0 }, // % hybrid/multi-cloud
   },
 
+  // ❓ FAQs
+  faqs: [
+    {
+      question: String,
+      answer: String,
+    },
+  ],
+
 });
 
 const subcategorySchema = new mongoose.Schema({
@@ -81,6 +89,8 @@ const subcategorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
+  metaTitle: { type: String, default: "" },
+  metaKeywords: [{ type: String }], // array for multiple keywords
   companies: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -88,6 +98,12 @@ const subcategorySchema = new mongoose.Schema({
     },
   ],
   details: detailsSchema,
+  faqs: [
+    {
+      question: String,
+      answer: String,
+    },
+  ],
 });
 
 const Subcategory = mongoose.model("Subcategory", subcategorySchema);

@@ -8,7 +8,7 @@ import { client as redisClient } from "../config/redisClient.js";
 
 export const createSubcategory = async (req, res) => {
   try {
-    const { subcategories, categoryId } = req.body; // Remove description from here
+    const { subcategories, categoryId } = req.body;
 
     if (!subcategories || !categoryId) {
       return res
@@ -30,7 +30,7 @@ export const createSubcategory = async (req, res) => {
     const createdSubcategories = [];
 
     for (const subcategoryData of subcategories) {
-      const { name, description, totalCompanies } = subcategoryData; // Get description from individual subcategory
+      const { name, description, totalCompanies, metaTitle, metaKeywords } = subcategoryData;
 
       if (!name) {
         return res
@@ -70,10 +70,11 @@ export const createSubcategory = async (req, res) => {
       const subcategory = new Subcategory({
         name,
         slug,
-        description, // Now using individual description
+        description,
         totalCompanies: totalCompaniesNum,
         category: category._id,
-        
+        metaTitle: metaTitle || "",
+        metaKeywords: Array.isArray(metaKeywords) ? metaKeywords : []
       });
 
       await subcategory.save();
@@ -108,7 +109,7 @@ export const getAllSubcategories = async (req, res) => {
 export const getAllSubcategoriesDashboard = async (req, res) => {
   try {
     const subcategories = await Subcategory.find({})
-      .select("name description totalCompanies category slug") // Explicitly select required fields including slug
+      .select("name description totalCompanies category slug metaTitle metaKeywords faqs content") // Explicitly select required fields including slug, meta fields, faqs, and content
       .lean();
 
     res.status(200).json({ ok: true, data: subcategories });
@@ -125,9 +126,14 @@ export const editSubcategory = async (req, res) => {
     // Use optional chaining and default values to avoid destructuring errors
     let name = req.body?.name;
     let description = req.body?.description;
-     let content = req.body?.content; // Add content field
+    let content = req.body?.content; // Add content field
     let totalCompanies = req.body?.totalCompanies;
     let details = req.body?.details;
+    // Add meta fields
+    let metaTitle = req.body?.metaTitle;
+    let metaKeywords = req.body?.metaKeywords;
+    // Add FAQ fields
+    let faqs = req.body?.faqs;
 
     // Parse details if it's a JSON string (from FormData)
     if (typeof details === 'string') {
@@ -165,12 +171,28 @@ export const editSubcategory = async (req, res) => {
     if (description !== undefined) {
       subcategory.description = description;
     }
- // Only update content if provided
+    
+    // Only update meta fields if provided
+    if (metaTitle !== undefined) {
+      subcategory.metaTitle = metaTitle;
+    }
+    
+    if (metaKeywords !== undefined) {
+      subcategory.metaKeywords = Array.isArray(metaKeywords) ? metaKeywords : [];
+    }
+
+    // Only update FAQs if provided
+    if (faqs !== undefined) {
+      subcategory.faqs = Array.isArray(faqs) ? faqs : [];
+    }
+
+    // Only update content if provided
     let contentUpdated = false;
     if (content !== undefined) {
       subcategory.content = content;
       contentUpdated = true;
     }
+    
     // Only update totalCompanies if provided
     if (totalCompanies !== undefined) {
       // Convert totalCompanies to Number if it's provided as a string
@@ -258,7 +280,7 @@ export const getSubcategoryDetails = async (req, res) => {
     const { slug } = req.params;
 
     const subcategory = await Subcategory.findOne({ slug })
-      .select("name slug details totalCompanies content") // 👈 slug bhi select kiya
+      .select("name slug details totalCompanies content metaTitle metaKeywords description faqs") // 👈 slug bhi select kiya
       .lean();
 
     if (!subcategory) {
@@ -287,6 +309,10 @@ export const getSubcategoryDetails = async (req, res) => {
       details: subcategory.details,
       content: subcategory.content, // 👈 Add content to response
       totalCompanies: subcategory.totalCompanies,
+      description: subcategory.description, // Add description field to response
+      metaTitle: subcategory.metaTitle, // Add meta fields to response
+      metaKeywords: subcategory.metaKeywords,
+      faqs: subcategory.faqs || [], // Add FAQs to response
       sponsorCompanies: sponsorCompanies // Add sponsored companies to response
     });
   } catch (err) {
@@ -370,7 +396,7 @@ async function fetchCompaniesFromDB(slug, page, limit, search, sponsoredOnly = f
   const subcategory = await Subcategory.findOne({
     slug: slug.trim().toLowerCase(),
   })
-    .select("name slug description category companies totalCompanies details")
+    .select("name slug description category companies totalCompanies details metaTitle metaKeywords faqs")
     .populate("category", "name")
     .lean();
 
@@ -454,6 +480,9 @@ async function fetchCompaniesFromDB(slug, page, limit, search, sponsoredOnly = f
     description: subcategory.description,
     categoryName: subcategory.category?.name || "No category found",
     details: subcategory.details,
+    metaTitle: subcategory.metaTitle, // Add meta fields to response
+    metaKeywords: subcategory.metaKeywords,
+    faqs: subcategory.faqs || [], // Add FAQs to response
     companies: companiesWithRatings,
     pagination: {
       total,
