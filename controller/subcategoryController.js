@@ -381,13 +381,16 @@ async function fetchCompaniesFromDB(slug, page, limit, search, sponsoredOnly = f
 
 
   // Build search filter
-  let query = { _id: { $in: subcategory.companies } };
+  let query = { 
+    _id: { $in: subcategory.companies },
+    subcategory: subcategory._id  // Add this line to ensure companies belong to the correct subcategory
+  };
 
   // Add sponsorship filter if requested
   if (sponsoredOnly) {
     query.sponsor = true;
   }
-  
+
   // Add homepage filter if requested
   if (homepage) {
     query.homepage = true;
@@ -435,6 +438,7 @@ async function fetchCompaniesFromDB(slug, page, limit, search, sponsoredOnly = f
 
       return {
         ...company,
+        
         teamLeads: company.teamLeads ? company.teamLeads.length : 0,
         averageRating: averageRating.toFixed(1),
         totalReviews: reviews.length
@@ -487,7 +491,10 @@ export const getCompaniesBySubcategorySlugSitemap = async (req, res) => {
     }
 
     const companies = await CompanyTeamData.find(
-      { _id: { $in: subcategory.companies } },
+      { 
+        _id: { $in: subcategory.companies },
+        subcategory: subcategory._id  // Add this line to ensure companies belong to the correct subcategory
+      },
       { slug: 1, updatedAt: 1, createdAt: 1 } // light fields only
     ).lean();
 
@@ -526,9 +533,10 @@ export const getRelatedCompanies = async (req, res) => {
     }
 
     // Directly fetch only first 4 companies from DB (no shuffle, sorted by _id)
+    // Ensure companies belong to the correct subcategory
     const relatedCompanies = await CompanyTeamData.find(
       {
-        subcategory,
+        subcategory: subcategory,  // Add this line to ensure companies belong to the correct subcategory
         slug: { $ne: excludeSlug },
       },
       {

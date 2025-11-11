@@ -297,6 +297,12 @@ export const uploadCompaniesToSubcategory = async (req, res) => {
         { _id: subcategory._id },
         { $addToSet: { companies: { $each: validCompanyIds } } }
       );
+      
+      // Also update all companies to ensure they have the correct subcategory reference
+      await CompanyTeamData.updateMany(
+        { _id: { $in: validCompanyIds } },
+        { $set: { subcategory: subcategory._id } }
+      );
     }
 
     // Process Team Leads with better duplicate handling
@@ -552,6 +558,43 @@ export const searchCompanies = async (req, res) => {
   try {
     const { company_name, company_country, subcategory_slug } = req.query;
 
+    // If subcategory is specified, we need to use AND conditions to ensure
+    // companies belong to the correct subcategory
+    if (subcategory_slug && subcategory_slug.trim() !== "") {
+      const subcategory = await Subcategory.findOne({
+        slug: subcategory_slug.trim(),
+      });
+      
+      if (!subcategory) {
+        return res.status(404).json({ 
+          ok: false, 
+          message: "Subcategory not found." 
+        });
+      }
+      
+      // Build filter with subcategory as mandatory condition
+      const filter = {
+        subcategory: subcategory._id
+      };
+      
+      // Add additional filters if provided
+      if (company_name && company_name.trim() !== "") {
+        filter.companyName = { $regex: company_name.trim(), $options: "i" };
+      }
+      
+      if (company_country && company_country.trim() !== "") {
+        filter.companyCountry = { $regex: company_country.trim(), $options: "i" };
+      }
+      
+      const companies = await CompanyTeamData.find(filter).lean();
+      
+      return res.status(200).json({
+        ok: true,
+        data: companies,
+      });
+    }
+    
+    // If no subcategory specified, use OR conditions for flexible search
     let orConditions = [];
 
     // 1. Company Name
@@ -566,18 +609,6 @@ export const searchCompanies = async (req, res) => {
       orConditions.push({
         companyCountry: { $regex: company_country.trim(), $options: "i" },
       });
-    }
-
-    // 3. Subcategory Slug -> Get ObjectId
-    if (subcategory_slug && subcategory_slug.trim() !== "") {
-      const subcategory = await Subcategory.findOne({
-        slug: subcategory_slug.trim(),
-      });
-      if (subcategory) {
-        orConditions.push({
-          subcategory: subcategory._id,
-        });
-      }
     }
 
     // 🛑 If no valid filter, return all OR empty
@@ -621,15 +652,61 @@ export const searchCompanies = async (req, res) => {
 export const getAllCompaniesCategory = async (req, res) => {
   try {
     // Get query parameters
-    const { page = 1, limit = 50, search = '', searchType = 'company' } = req.query;
+    const { page = 1, limit = 50, search = '', searchType = 'company', employeeRange = '' } = req.query;
     
     // Convert to numbers
     const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(limit, 10)  ;
+    const limitNum = parseInt(limit, 10);
     const skip = (pageNum - 1) * limitNum;
 
     // Build search filter
     let searchFilter = {};
+    
+    // Add employee range filter if provided
+    if (employeeRange && employeeRange.trim() !== '') {
+      const range = employeeRange.trim();
+      
+      // For simplicity and better performance, we'll use a regex approach
+      // This will match companies with employee counts in the specified range
+      if (range === '1-10') {
+        // Match companies with employees field containing numbers 1-10
+        searchFilter.$or = [
+          { employees: { $gte: 1, $lte: 10 } }, // For numeric values
+          { employees: { $regex: /\b([1-9]|10)\b/, $options: 'i' } } // For string values
+        ];
+      } else if (range === '11-50') {
+        searchFilter.$or = [
+          { employees: { $gte: 11, $lte: 50 } },
+          { employees: { $regex: /\b(1[1-9]|[2-4][0-9]|50)\b/, $options: 'i' } }
+        ];
+      } else if (range === '51-200') {
+        searchFilter.$or = [
+          { employees: { $gte: 51, $lte: 200 } },
+          { employees: { $regex: /\b([5-9][0-9]|1[0-9]{2}|200)\b/, $options: 'i' } }
+        ];
+      } else if (range === '201-500') {
+        searchFilter.$or = [
+          { employees: { $gte: 201, $lte: 500 } },
+          { employees: { $regex: /\b([2-4][0-9]{2}|500)\b/, $options: 'i' } }
+        ];
+      } else if (range === '501-1000') {
+        searchFilter.$or = [
+          { employees: { $gte: 501, $lte: 1000 } },
+          { employees: { $regex: /\b([5-9][0-9]{2}|1000)\b/, $options: 'i' } }
+        ];
+      } else if (range === '1001-5000') {
+        searchFilter.$or = [
+          { employees: { $gte: 1001, $lte: 5000 } },
+          { employees: { $regex: /\b([1-4][0-9]{3}|5000)\b/, $options: 'i' } }
+        ];
+      } else if (range === '5001+') {
+        searchFilter.$or = [
+          { employees: { $gte: 5001 } },
+          { employees: { $regex: /\b([5-9][0-9]{3}|[1-9][0-9]{4,})\b/, $options: 'i' } }
+        ];
+      }
+    }
+    
     if (search && search.trim() !== '') {
       if (searchType === 'subcategory') {
         // Search by subcategory name only
@@ -640,16 +717,19 @@ export const getAllCompaniesCategory = async (req, res) => {
         const subcategoryIds = matchingSubcategories.map(sub => sub._id);
         
         searchFilter = {
+          ...searchFilter,
           subcategory: { $in: subcategoryIds }
         };
       } else if (searchType === 'employees') {
         // Search by employees count
         searchFilter = {
+          ...searchFilter,
           employees: { $regex: search.trim(), $options: 'i' }
         };
       } else {
         // Default search by company name only
         searchFilter = {
+          ...searchFilter,
           companyName: { $regex: search.trim(), $options: 'i' }
         };
       }
